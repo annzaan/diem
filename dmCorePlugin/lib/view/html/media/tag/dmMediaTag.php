@@ -117,4 +117,9 @@ abstract class dmMediaTag extends dmHtmlTag
   {
     return $this->stylesheets;
   }
+  
+  public function getResource()
+  {
+    return $this->resource;
+  }
 }

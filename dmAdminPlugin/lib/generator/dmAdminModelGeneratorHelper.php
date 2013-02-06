@@ -58,7 +58,8 @@ abstract class dmAdminModelGeneratorHelper extends sfModelGeneratorHelper
 
   public function linkToDelete($object, $params)
   {
-    $title = __($params['title'], array('%1%' => dmString::strtolower(__($this->getModule()->getName()))));
+    // ZAAN 
+    $title = __(isset($params['title']) ? $params['title'] : 'Delete %1%', array('%1%' => dmString::strtolower(__($this->getModule()->getName()))));
     return '<li class="sf_admin_action_delete">'.link_to1(__($params['label']), $this->getRouteArrayForAction('delete', $object),
     array(
     'class' => 's16 s16_delete dm_delete_link sf_admin_action',
@@ -67,6 +68,16 @@ abstract class dmAdminModelGeneratorHelper extends sfModelGeneratorHelper
     'confirm' => $title.' ?'
     )).'</li>';
   }
+  
+  public function linkToEdit($object, $params)
+  {
+    // ZAAN 
+    $title = __(isset($params['title']) ? $params['title'] : 'Edit %1%', array('%1%' => dmString::strtolower(__($this->getModule()->getName()))));
+    return '<li class="sf_admin_action_edit">'.link_to1(__($params['label']), $this->getRouteArrayForAction('edit', $object),
+    array(
+    'class' => 's16 s16_edit dm_edit_link sf_admin_action',
+    'title' => $title)).'</li>';
+  }  
 
   public function linkToList($params)
   {

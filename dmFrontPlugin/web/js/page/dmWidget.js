@@ -320,6 +320,10 @@ $.widget('ui.dmWidget', {
   {
     var self = this;
     
+    if (!this.element.attr('id')) {
+      return '';
+    }
+    
     this.id = this.element.attr('id').substring(10);
     
     $('> a.dm_widget_edit, > a.dm_widget_fast_edit', this.element).click(function() {

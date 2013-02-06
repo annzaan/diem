@@ -285,13 +285,19 @@ class dmMarkdown extends MarkdownExtra_Parser
       
       if($size)
       {
-        if (false !== strpos($size, 'x'))
+        if (substr_count($size, 'x') == 2)
+        {
+          list($width, $height, $method) = explode('x', $size);
+        }
+        elseif (false !== strpos($size, 'x'))
         {
           list($width, $height) = explode('x', $size);
+          $method = false;
         }
         else
         {
           $width = $height = $size;
+          $method = false;
         }
         
         if($width)
@@ -301,6 +307,10 @@ class dmMarkdown extends MarkdownExtra_Parser
         if($height)
         {
           $tag->height($height);
+        }
+        if ($method)
+        {
+          $tag->method($method);
         }
       }
     }

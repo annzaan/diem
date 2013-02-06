@@ -40,9 +40,12 @@ class dmProject
   {
     if (null === self::$models)
     {
+      $files_1 = glob(sfConfig::get('sf_lib_dir').'/model/doctrine/base/Base*.class.php');
+      $files_2 = glob(sfConfig::get('sf_lib_dir').'/model/doctrine/*Plugin/base/Base*.class.php');  
+      
       $baseFiles = array_merge(
-        glob(sfConfig::get('sf_lib_dir').'/model/doctrine/base/Base*.class.php'),
-        glob(sfConfig::get('sf_lib_dir').'/model/doctrine/*Plugin/base/Base*.class.php')
+        is_array($files_1) ? $files_1 : array(),
+        is_array($files_2) ? $files_2 : array()
       );
 
       $dmCoreDir = dmOs::join(sfConfig::get('sf_lib_dir'), 'model/doctrine/dmCorePlugin/base/');

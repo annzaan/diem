@@ -5,7 +5,7 @@
     <?php echo $this->addCredentialCondition('[?php echo $helper->linkToDelete($'.$this->getSingularName().', '.$this->asPhp($params).') ?]', $params) ?>
 
 <?php elseif ('_edit' == $name): ?>
-    <?php echo ''; ?>
+    <?php echo $this->addCredentialCondition('[?php echo $helper->linkToEdit($'.$this->getSingularName().', '.$this->asPhp($params).') ?]', $params) ?>
 
 <?php else: ?>
     <li class="sf_admin_action_<?php echo $params['class_suffix'] ?>">
