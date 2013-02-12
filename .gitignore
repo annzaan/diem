@@ -1,8 +1,0 @@
-.DS_Store
-Thumbs.db
-nbproject
-dmCorePlugin/test/project/cache/*
-dmCorePlugin/test/project/log/*
-*.orig
-*.swp
-.svn*

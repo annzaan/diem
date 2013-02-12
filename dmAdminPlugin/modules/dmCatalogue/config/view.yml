@@ -1,4 +1,0 @@
-indexSuccess:
-
-  stylesheets: [ lib.ui-dialog ]
-  javascripts: [ lib.ui-dialog, lib.form, admin.catalogue ] 

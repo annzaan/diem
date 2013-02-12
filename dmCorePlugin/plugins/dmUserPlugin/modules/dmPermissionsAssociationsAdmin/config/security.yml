@@ -1,6 +1,0 @@
-new:
-  is_secure: true
-  credentials: dmPermissionsAssociations/new
-create:
-  is_secure: true
-  credentials: dmPermissionsAssociations/create
