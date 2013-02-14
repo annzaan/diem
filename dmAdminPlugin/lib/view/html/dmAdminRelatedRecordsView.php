@@ -26,7 +26,8 @@ class dmAdminRelatedRecordsView extends dmConfigurable
   public function getDefaultOptions()
   {
     return array(
-      'max'   => 5
+      'max'   => 5,
+      'renderer' => '__toString'
     );
   }
 
@@ -96,7 +97,7 @@ class dmAdminRelatedRecordsView extends dmConfigurable
       if($this->getOption('foreign_has_route'))
       {
         $html .= $this->helper->link($foreignRecord)
-        ->text($foreignRecord->__toString())
+        ->text($foreignRecord->{$this->getOption('renderer')}())
         ->set('.associated_record.s16right.s16_arrow_up_right_medium');
       }
       else
