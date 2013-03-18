@@ -9,7 +9,7 @@
           <th><input class="sf_admin_list_batch_checkbox" type="checkbox" /></th>
 <?php endif; ?>
           [?php include_partial('<?php echo $this->getModuleName() ?>/list_th_<?php echo $this->configuration->getValue('list.layout') ?>', array('sort' => $sort)) ?]
-          <th>Opcje</th>
+          <th>[?php echo __('Actions') ?]</th>
         </tr>
       </thead>
       <tfoot>
@@ -18,7 +18,7 @@
           <th><input class="sf_admin_list_batch_checkbox" type="checkbox" /></th>
 <?php endif; ?>
           [?php include_partial('<?php echo $this->getModuleName() ?>/list_th_<?php echo $this->configuration->getValue('list.layout') ?>', array('sort' => $sort)) ?]
-          <th>Opcje</th>
+          <th>[?php echo __('Actions') ?]</th>
         </tr>
       </tfoot>
       <tbody class='{toggle_url: "[?php echo £link('@'.$helper->getUrlForAction('toggleBoolean'))->getHref() ?]"}'>
