@@ -10,7 +10,7 @@
  * @author     Your name here
  * @version    SVN: $Id$
  * @generator  Diem 5.4.0-DEV
- * @gen-file   /home/projekty/temp/!deus/annzaan-diem-4/dmCorePlugin/data/generator/dmDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php */
+ */
 abstract class BaseDmUserForm extends BaseFormDoctrine
 {
   public function setup()
