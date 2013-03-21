@@ -10,7 +10,7 @@
  * @author     Your name here
  * @version    SVN: $Id$
  * @generator  Diem 5.4.0-DEV
- */
+ * @gen-file   /home/projekty/temp/!deus/annzaan-diem-2/dmCorePlugin/data/generator/dmDoctrineForm/default/template/sfDoctrineFormGeneratedTemplate.php */
 abstract class BaseDmTestPostForm extends BaseFormDoctrine
 {
   public function setup()
@@ -137,7 +137,7 @@ abstract class BaseDmTestPostForm extends BaseFormDoctrine
    */
   protected function createMediaFormForImageId()
   {
-    return DmMediaForRecordForm::factory($this->object, 'image_id', 'Image', $this->validatorSchema['image_id']->getOption('required'));
+    return DmMediaForRecordForm::factory($this->object, 'image_id', 'Image', $this->validatorSchema['image_id']->getOption('required'), $this);
   }
   /**
    * Creates a DmMediaForm instance for file_id
@@ -146,7 +146,7 @@ abstract class BaseDmTestPostForm extends BaseFormDoctrine
    */
   protected function createMediaFormForFileId()
   {
-    return DmMediaForRecordForm::factory($this->object, 'file_id', 'File', $this->validatorSchema['file_id']->getOption('required'));
+    return DmMediaForRecordForm::factory($this->object, 'file_id', 'File', $this->validatorSchema['file_id']->getOption('required'), $this);
   }
 
   protected function doBind(array $values)
