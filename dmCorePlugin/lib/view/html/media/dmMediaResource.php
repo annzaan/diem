@@ -56,7 +56,7 @@ class dmMediaResource
     return $this->pathFromWebDir;
   }
   
-  public function getWebPath($absolute = false)
+  public function getWebPath()
   {
     if($this->type === self::REMOTE)
     {
@@ -64,14 +64,7 @@ class dmMediaResource
     }
     else
     {
-    	if(!$absolute)
-    	{
-      	$webPath = $this->requestContext['relative_url_root'].$this->pathFromWebDir;
-    	}
-    	else
-    	{
-    		$webPath = $this->requestContext['absolute_url_root'].$this->pathFromWebDir;
-    	}
+      $webPath = $this->requestContext['relative_url_root'].$this->pathFromWebDir;
     }
     
     return $webPath;

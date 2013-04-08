@@ -23,7 +23,7 @@
     $label = dmString::humanize($name);
   }
 
-  $label = __($label, array(), '<?php echo $this->getModule()->getOption('i18n_catalogue')?>');
+  $label = __($label);
 
   if($form->getObject()->getTable()->isI18nColumn($name))
   {
@@ -40,7 +40,7 @@
     _media('dmCore/images/16/required.png')
     ->size(16, 16)
     ->set('.dm_label_required')
-    ->alt(__('Required.', array(), 'sf_admin'));
+    ->alt(__('Required.'));
   }
 ?]
 [?php if ($field->isPartial()): ?]
@@ -53,7 +53,7 @@
   <div data-field-name="[?php echo $name ?]" class="[?php echo $divClass ?][?php $form[$name]->hasError() and print ' errors' ?]">
     [?php if ($form[$name]->hasError()): ?]
       <div class="error">
-        <div class="s16 s16_error">[?php echo $form[$name]->renderError() ?]</div>
+        <div class="s16 s16_error">[?php echo __((string) $form[$name]->getError()) ?]</div>
       </div>
     [?php endif; ?]
     <div class="sf_admin_form_row_inner clearfix">
@@ -65,45 +65,16 @@
       
       if($form[$name]->getWidget() instanceof sfWidgetFormDoctrineChoice && $form[$name]->getWidget()->getOption('multiple'))
       {
-	    $newRelationLink = _link(dmDb::table($form[$name]->getWidget()->getOption('model'))->getDmModule()->getSfName() . '/new')->text(__('New'));
-		if (!$form->isNew()) {
-			$newRelationLink->param('defaults['.$form->getObject()->getTable()->getRelation(dmString::camelize(substr($name, 0, strlen($name)-5)))->getForeign().']', $form->getObject()->get('id'));
-		}
-        echo sprintf('<div class="control selection"><span class="select_all">%s</span><span class="unselect_all">%s</span><span class="see_selected">%s</span><span class="see_unselected">%s</span><span class="see_all">%s</span><span class="create_new">%s</span></div>', 
-        __('Select all', array(), 'dm'), __('Unselect all', array(), 'dm'), __('See selected', array(), 'dm'), __('See unselected', array(), 'dm'), __('See all', array(), 'dm'),
-			$newRelationLink);
-      }
-	$widget = $form[$name]->getWidget();
-      if($widget instanceof sfWidgetFormDoctrineChoice)
-      {
-      	$pagination = '';
-      	if($form[$name]->getWidget() instanceof sfWidgetFormDmPaginatedDoctrineChoice){
-        	$pager = $form[$name]->getWidget()->getPager();
-        	$pager->setMaxPerPage($sf_user->getAttribute('<?php echo $this->getModuleName()?>.' . $name . '.max_per_page', 10, 'admin_module'));
-        	$widget->init();
-        	$linkArray = $helper->getRouteArrayForAction('paginateRelation', $form->getObject());
-        	$linkArray['field'] = $name;
-        	ob_start();
-        	include_partial('<?php echo $this->getModuleName()?>/form_field_pagination', array('pager' => $pager, 'form' => $form,  'field' => $name, 'link' => url_for($linkArray)));
-        	$pagination = ob_get_clean();
-        }
-	  $checkbox_tools='';
-	  if ($widget->getOption('multiple')) {
-		$checkbox_tools = sprintf('<div class="dm_checkbox_tools"><div class="dm_checkbox_search_filter"><input class="search-box" type="text" title="'.__('Search').'" value="%s"/><span class="clear"><a title="'.__('Clear search').'">X</a></span></div>%s</div>', isset($search) ? $search : '', $pagination);
-	  } 
-        $resizer = '<div class="resize-handler"></div>';
-      }else{
-      	$checkbox_tools = '';
-      	$resizer = '';
+        echo sprintf('<div class="control selection"><span class="select_all">%s</span><span class="unselect_all">%s</span></div>', __('Select all'), __('Unselect all'));
       }
       
       echo '</div>';
 
-      echo '<div class="content">'.$checkbox_tools.$form[$name]->render($attributes instanceof sfOutputEscaper ? $attributes->getRawValue() : $attributes). $resizer . '</div>';
+      echo '<div class="content">'.$form[$name]->render($attributes instanceof sfOutputEscaper ? $attributes->getRawValue() : $attributes).'</div>';
 
       if ($help)
       {
-        echo '<div class="help">'.__($help, array(), '<?php echo $this->getModule()->getOption('i18n_catalogue')?>').'</div>';
+        echo '<div class="help">'.__($help).'</div>';
       }
       elseif($help = $form[$name]->renderHelp())
       {
@@ -136,7 +107,7 @@
       if ($relation)
       {
         echo '<div class="sf_admin_form_row_inner clearfix">';
-        echo '<div class="label_wrap">'.__($field->getConfig('label', '', true), array(), '<?php echo $this->getModule()->getOption('i18n_catalogue')?>').'</div>';
+        echo '<div class="label_wrap">'.__($field->getConfig('label', '', true)).'</div>';
         echo $sf_context->getServiceContainer()->mergeParameter('related_records_view.options', array(
           'record' => $form->getObject(),
           'alias'  => $alias

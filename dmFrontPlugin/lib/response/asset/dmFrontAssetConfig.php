@@ -12,7 +12,6 @@ class dmFrontAssetConfig extends dmAssetConfig
         'front.dmReset',
         'lib.ui',
         'lib.ui-dialog',
-        'lib.ui-resizable',
         'lib.tipsy',
         'core.tool',
         'core.editMode',

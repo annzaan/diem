@@ -35,8 +35,7 @@ class Doctrine_DmGallery extends Doctrine_Record_Generator
     $this->index('record_dm_media', array('fields' => array('dm_record_id', 'dm_media_id'), 'type' => 'unique'));
     $this->option('symfony', array('form' => false, 'filter' => false));
 
-    $this->addListener(new Doctrine_Template_Listener_Sortable(array('new' => isset($this->_options['new']) ? $this->_options['new'] : 'first')));
-    
+    $this->addListener(new Doctrine_Template_Listener_Sortable());
   }
   
   public function generateClass(array $definition = array())

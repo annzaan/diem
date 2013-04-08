@@ -32,7 +32,6 @@ class dmFrontPagerView extends dmConfigurable implements Iterator, Countable
       'nb_links'          => 9,
       'ajax'              => false,
       'url_params'        => array(),
-      'anchor'            => false,
       'widget_id'         => null   // only used when ajax = true
     );
   }
@@ -218,11 +217,6 @@ class dmFrontPagerView extends dmConfigurable implements Iterator, Countable
     ->param('page', $page)
     ->params($this->getOption('url_params'))
     ->text($text);
-    
-    if($this->getOption('anchor'))
-    {
-      $link->anchor($this->getOption('anchor'));
-    }
 
     if($this->getOption('ajax'))
     {

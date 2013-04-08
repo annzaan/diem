@@ -156,7 +156,7 @@ abstract class dmDoctrineTableExport extends dmConfigurable
     }
     elseif(is_string($value))
     {
-      $value = addslashes(trim($value));
+      $value = trim($value);
     }
     elseif(is_object($value))
     {

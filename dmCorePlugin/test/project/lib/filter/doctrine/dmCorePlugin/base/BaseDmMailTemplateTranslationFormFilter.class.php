@@ -12,7 +12,22 @@ abstract class BaseDmMailTemplateTranslationFormFilter extends BaseFormFilterDoc
 {
   public function setup()
   {
+    $this->setWidgets(array(
+      'description'     => new sfWidgetFormDmFilterInput(),
+      'subject'         => new sfWidgetFormDmFilterInput(),
+      'body'            => new sfWidgetFormDmFilterInput(),
+      'from_email'      => new sfWidgetFormDmFilterInput(),
+      'to_email'        => new sfWidgetFormDmFilterInput(),
+      'cc_email'        => new sfWidgetFormDmFilterInput(),
+      'bcc_email'       => new sfWidgetFormDmFilterInput(),
+      'reply_to_email'  => new sfWidgetFormDmFilterInput(),
+      'sender_email'    => new sfWidgetFormDmFilterInput(),
+      'list_unsuscribe' => new sfWidgetFormDmFilterInput(),
+      'is_html'         => new sfWidgetFormChoice(array('choices' => array('' => $this->getI18n()->__('yes or no', array(), 'dm'), 1 => $this->getI18n()->__('yes', array(), 'dm'), 0 => $this->getI18n()->__('no', array(), 'dm')))),
+      'is_active'       => new sfWidgetFormChoice(array('choices' => array('' => $this->getI18n()->__('yes or no', array(), 'dm'), 1 => $this->getI18n()->__('yes', array(), 'dm'), 0 => $this->getI18n()->__('no', array(), 'dm')))),
+    ));
 
+<<<<<<< HEAD
 
 		if($this->needsWidget('description')){
 			$this->setWidget('description', new sfWidgetFormDmFilterInput());
@@ -74,6 +89,22 @@ abstract class BaseDmMailTemplateTranslationFormFilter extends BaseFormFilterDoc
 			$this->setValidator('dm_mail_template_list', new sfValidatorDoctrineChoice(array('multiple' => false, 'model' => 'DmMailTemplate', 'required' => true)));
 		}
 
+=======
+    $this->setValidators(array(
+      'description'     => new sfValidatorPass(array('required' => false)),
+      'subject'         => new sfValidatorPass(array('required' => false)),
+      'body'            => new sfValidatorPass(array('required' => false)),
+      'from_email'      => new sfValidatorPass(array('required' => false)),
+      'to_email'        => new sfValidatorPass(array('required' => false)),
+      'cc_email'        => new sfValidatorPass(array('required' => false)),
+      'bcc_email'       => new sfValidatorPass(array('required' => false)),
+      'reply_to_email'  => new sfValidatorPass(array('required' => false)),
+      'sender_email'    => new sfValidatorPass(array('required' => false)),
+      'list_unsuscribe' => new sfValidatorPass(array('required' => false)),
+      'is_html'         => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
+      'is_active'       => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
+    ));
+>>>>>>> c3a3392eeaaf609356f1a404ff87d4a5bf5a7ff3
     
 
     $this->widgetSchema->setNameFormat('dm_mail_template_translation_filters[%s]');

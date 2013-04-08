@@ -13,10 +13,6 @@
 abstract class PluginDmCatalogue extends BaseDmCatalogue
 {
 
-	/**
-	 * @param string $source 
-	 * @return boolean
-	 */
   public function hasTranslationFor($source)
   {
     return dmDb::query('DmTransUnit')

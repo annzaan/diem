@@ -19,7 +19,7 @@ class dmProject
     {
       self::$key = basename(sfConfig::get('sf_root_dir'));
     }
-
+    
     return self::$key;
   }
 
@@ -32,7 +32,7 @@ class dmProject
     {
       self::$hash = substr(md5(sfConfig::get('sf_root_dir')), -8);
     }
-
+    
     return self::$hash;
   }
 
@@ -40,14 +40,16 @@ class dmProject
   {
     if (null === self::$models)
     {
-      $libDir = dmOs::normalize(sfConfig::get('sf_lib_dir'));
+      $files_1 = glob(sfConfig::get('sf_lib_dir').'/model/doctrine/base/Base*.class.php');
+      $files_2 = glob(sfConfig::get('sf_lib_dir').'/model/doctrine/*Plugin/base/Base*.class.php');  
+      
       $baseFiles = array_merge(
-        glob($libDir.'/model/doctrine/base/Base*.class.php'),
-        glob($libDir.'/model/doctrine/*Plugin/base/Base*.class.php')
+        is_array($files_1) ? $files_1 : array(),
+        is_array($files_2) ? $files_2 : array()
       );
 
-      $dmCoreDir = dmOs::join($libDir, 'model/doctrine/dmCorePlugin/base/');
-      $dmUserDir = dmOs::join($libDir, 'model/doctrine/dmUserPlugin/base/');
+      $dmCoreDir = dmOs::join(sfConfig::get('sf_lib_dir'), 'model/doctrine/dmCorePlugin/base/');
+      $dmUserDir = dmOs::join(sfConfig::get('sf_lib_dir'), 'model/doctrine/dmUserPlugin/base/');
 
       foreach($baseFiles as $index => $file)
       {
@@ -56,13 +58,13 @@ class dmProject
           unset($baseFiles[$index]);
         }
       }
-
+      
       self::$models = self::getModelsFromBaseFiles($baseFiles);
     }
 
     return self::$models;
   }
-
+  
   public static function getAllModels()
   {
     if (null === self::$allModels)
@@ -77,7 +79,7 @@ class dmProject
 
     return self::$allModels;
   }
-
+  
   public static function getDmModels()
   {
     if (null === self::$dmModels)
@@ -86,7 +88,7 @@ class dmProject
 
       self::$dmModels = self::getModelsFromBaseFiles($baseFiles);
     }
-
+    
     return self::$dmModels;
   }
 
@@ -100,17 +102,17 @@ class dmProject
 
     return $models;
   }
-
+  
   public static function getRootDir()
   {
     return dmOs::normalize(sfConfig::get('sf_root_dir'));
   }
-
+  
   public static function getNormalizedRootDir()
   {
     return dmOs::normalize(self::getRootDir());
   }
-
+  
   /**
    * remove sfConfig::get('sf_root_dir') from path
    */
@@ -120,10 +122,10 @@ class dmProject
     {
       $path = substr($path, strlen(self::getRootDir()));
     }
-
+    
     return trim($path, '/');
   }
-
+  
   /**
    * add sfConfig::get('sf_root_dir') to path
    */
@@ -137,15 +139,15 @@ class dmProject
     {
       $path = dmOs::join($path);
     }
-
+    
     return $path;
   }
-
+  
   public static function isInProject($path)
   {
     return strpos(dmOs::normalize($path), self::getRootDir()) === 0;
   }
-
+  
   public static function appExists($application)
   {
     return file_exists(self::rootify('apps/'.$application.'/config/'.$application.'Configuration.class.php'));

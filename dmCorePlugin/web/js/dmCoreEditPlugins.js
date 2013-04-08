@@ -268,14 +268,7 @@
      pos = ['center', 'middle'];
     }
     
-    //fix, broken due to latest jquery. it is working but I assume we can't define pos of dialog via params.
-    //todo fix
-    pLeft += (wnd.width() - this.uiDialog.outerWidth()) / 2;
-    var dialogHeight = 350;
-    pTop += (wnd.height() - dialogHeight) / 2;
-    
-    
-/*    if (pos[0].constructor == Number) 
+    if (pos[0].constructor == Number) 
     {
      pLeft += pos[0];
     }
@@ -293,7 +286,7 @@
      var dialogHeight = 350;
      pTop += (wnd.height() - dialogHeight) / 2;
     }
-    */
+    
     // prevent the dialog from being too high (make sure the titlebar is accessible)
     pTop = Math.max(pTop, minTop);
     this.uiDialog.css({

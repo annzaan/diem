@@ -12,6 +12,7 @@ abstract class BaseDmTestPostTranslationFormFilter extends BaseFormFilterDoctrin
 {
   public function setup()
   {
+<<<<<<< HEAD
 
 
 		if($this->needsWidget('title')){
@@ -54,6 +55,25 @@ abstract class BaseDmTestPostTranslationFormFilter extends BaseFormFilterDoctrin
 			$this->setValidator('dm_test_post_list', new sfValidatorDoctrineChoice(array('multiple' => false, 'model' => 'DmTestPost', 'required' => true)));
 		}
 
+=======
+    $this->setWidgets(array(
+      'title'     => new sfWidgetFormDmFilterInput(),
+      'excerpt'   => new sfWidgetFormDmFilterInput(),
+      'body'      => new sfWidgetFormDmFilterInput(),
+      'url'       => new sfWidgetFormDmFilterInput(),
+      'is_active' => new sfWidgetFormChoice(array('choices' => array('' => $this->getI18n()->__('yes or no', array(), 'dm'), 1 => $this->getI18n()->__('yes', array(), 'dm'), 0 => $this->getI18n()->__('no', array(), 'dm')))),
+      'version'   => new sfWidgetFormDmFilterInput(),
+    ));
+
+    $this->setValidators(array(
+      'title'     => new sfValidatorPass(array('required' => false)),
+      'excerpt'   => new sfValidatorPass(array('required' => false)),
+      'body'      => new sfValidatorPass(array('required' => false)),
+      'url'       => new sfValidatorPass(array('required' => false)),
+      'is_active' => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
+      'version'   => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+    ));
+>>>>>>> c3a3392eeaaf609356f1a404ff87d4a5bf5a7ff3
     
 
     $this->widgetSchema->setNameFormat('dm_test_post_translation_filters[%s]');

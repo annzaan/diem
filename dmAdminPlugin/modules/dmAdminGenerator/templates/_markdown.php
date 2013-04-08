@@ -6,7 +6,7 @@
   use_javascript('lib.markitup');
   use_javascript('lib.markitupSet');
   use_javascript('core.markdown');
-
+  
   $uniqueCode = dmString::random();
 
   $attributes = array_merge(
@@ -18,7 +18,7 @@
 <div class="<?php echo $class ?><?php $form[$name]->hasError() and print ' errors' ?>">
   <?php if ($form[$name]->hasError()): ?>
     <div class="error">
-      <div class="s16 s16_error"><?php echo $form[$name]->renderError() ?></div>
+      <div class="s16 s16_error"><?php echo __((string) $form[$name]->getError()) ?></div>
     </div>
   <?php endif; ?>
   <div class="sf_admin_form_row_inner clearfix">
@@ -41,7 +41,7 @@
   <div class="sf_admin_form_row_inner">
     <label class="fnone"><?php echo __('Preview'); ?></label>
     <div class="markdown_preview markdown" id="dm_markdown_preview_<?php echo $uniqueCode ?>">
-      <?php echo _markdown($form->getObject()->get($name)) ?>
+      <?php echo markdown($form->getObject()->get($name)) ?>
     </div>
   </div>
 </div>

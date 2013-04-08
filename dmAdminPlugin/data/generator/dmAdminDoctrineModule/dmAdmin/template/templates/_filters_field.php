@@ -13,7 +13,7 @@
       [?php echo $form[$name]->render($attributes instanceof sfOutputEscaper ? $attributes->getRawValue() : $attributes) ?]
 
       [?php if ($help || $help = $form[$name]->renderHelp()): ?]
-        <div class="help">[?php echo __($help, array(), '<?php echo $this->getModule()->getOption('i18n_catalogue')?>') ?]</div>
+        <div class="help">[?php echo __($help) ?]</div>
       [?php endif; ?]
     </div>
   </div>

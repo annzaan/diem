@@ -10,44 +10,23 @@
  */
 abstract class dmFormDoctrine extends sfFormDoctrine
 {
-
-	/**
-	 * @var integer
-	 */
-	const EMBEDDED_FORM_SAVE_BEFORE = 0;
-	
-	/**
-	 * @var integer
-	 */
-	const EMBEDDED_FORM_SAVE_AFTER = 1;
-	
-	/**
-	 * @var array
-	 */
-	protected $embeddedFormsSaveTime;
-	
-	
   /**
-   * Removes a field from the form.
-   *
-   * It removes the widget and the validator for the given field.
-   *
-   * @param string $offset The field name
+   * Unset automatic fields like 'created_at', 'updated_at', 'position'
    */
-  public function offsetUnset($offset)
+  protected function unsetAutoFields($autoFields = null)
   {
-  	parent::offsetUnset($offset);
-  	
-  	if(isset($this->embeddedFormsSaveTime[self::EMBEDDED_FORM_SAVE_BEFORE][$offset]))
-  	{
-  		unset($this->embeddedFormsSaveTime[self::EMBEDDED_FORM_SAVE_BEFORE][$offset]);
-  	}
-  	else 
-  	{
-  		unset($this->embeddedFormsSaveTime[self::EMBEDDED_FORM_SAVE_AFTER][$offset]);
-  	}
+    $autoFields = null === $autoFields ? $this->getAutoFieldsToUnset() : (array) $autoFields;
+    
+    foreach($autoFields as $autoFieldName)
+    {
+      if (isset($this->widgetSchema[$autoFieldName]))
+      {
+        unset($this[$autoFieldName]);
+      }
+    }
   }
   
+<<<<<<< HEAD
 	
 	/**
 	 * @var integer
@@ -397,63 +376,162 @@ abstract class dmFormDoctrine extends sfFormDoctrine
 		{
 			throw new dmException(sprintf('The model "%s" is not internationalized.', $this->getModelName()));
 		}
+=======
+  protected function getAutoFieldsToUnset()
+  {
+    $fields = array('created_at', 'updated_at');
+>>>>>>> c3a3392eeaaf609356f1a404ff87d4a5bf5a7ff3
 
-		$i18nFormClass = $this->getI18nFormClass();
+    if ($this->getObject()->getTable()->isSortable())
+    {
+      $fields[] = 'position';
+    }
 
-		$culture = null === $culture ? dmDoctrineRecord::getDefaultCulture() : $culture;
+    if ($this->getObject()->getTable()->isVersionable())
+    {
+      $fields[] = 'version';
+    }
 
-		// translation already set, use it
-		if ($this->object->get('Translation')->contains($culture))
-		{
-			$translation = $this->object->get('Translation')->get($culture);
-		}
-		else
-		{
-			$translation = $this->object->get('Translation')->get($culture);
+    return $fields;
+  }
 
-			// populate new translation with fallback values
-			if (!$translation->exists())
-			{
-				if($fallback = $this->object->getI18nFallBack())
-				{
-					$fallBackData = $fallback->toArray();
-					unset($fallBackData['id'], $fallBackData['lang']);
-					$translation->fromArray($fallBackData);
-				}
-			}
-		}
+  protected function filterValuesByEmbeddedMediaForm(array $values, $local)
+  {
+    $formName = $local.'_form';
+     
+    if (!isset($this->embeddedForms[$formName]))
+    {
+      return $values;
+    }
+    
+    $isFileProvided = isset($values[$formName]['file']) && !empty($values[$formName]['file']['size']);
 
-		$i18nForm = new $i18nFormClass($translation);
+    // media id provided with drag&drop
+    if(!empty($values[$formName]['id']) && !$isFileProvided)
+    {
+      if($this->embeddedForms[$formName]->getObject()->isNew() || $this->embeddedForms[$formName]->getObject()->id != $values[$formName]['id'])
+      {
+        if($media = dmDb::table('DmMedia')->findOneByIdWithFolder($values[$formName]['id']))
+        {
+          $this->embeddedForms[$formName]->setObject($media);
+          $values[$formName]['dm_media_folder_id'] = $media->dm_media_folder_id;
+          
+          $this->validatorSchema[$formName]->offsetSet('id', new sfValidatorInteger(array('required' => true)));
+          $this->validatorSchema[$formName]->offsetSet('file', new sfValidatorFile(array('required' => false)));
+        }
+      }
+    }
+    // no existing media, no file, and it is not required : skip all
+    elseif ($this->embeddedForms[$formName]->getObject()->isNew() && !$isFileProvided && !$this->embeddedForms[$formName]->getValidator('file')->getOption('required'))
+    {
+      // remove the embedded media form if the file field was not provided
+      unset($this->embeddedForms[$formName], $values[$formName]);
+      // pass the media form validations
+      $this->validatorSchema[$formName] = new sfValidatorPass;
+    }
 
-		unset($i18nForm['id'], $i18nForm['lang']);
+    return $values;
+  }
 
-		return $i18nForm;
-	}
+  protected function processValuesForEmbeddedMediaForm(array $values, $local)
+  {
+    $formName = $local.'_form';
 
-	/**
-	 * Sets the current object for this form.
-	 *
-	 * @return dmDoctrineRecord The current object setted.
-	 */
-	public function setObject(dmDoctrineRecord $record)
-	{
-		return $this->object = $record;
-	}
-	
-	public function embedForm($name, sfForm $form, $decorator = null, $savingTime = self::EMBEDDED_FORM_SAVE_AFTER)
-	{
-		parent::embedForm($name, $form, $decorator);
-		$this->setEmbeddedFormSavingTime($name, $savingTime);
-		return $this;
-	}
-	
-	/**
-	* Returns the name of the class to use to embed DmMedia
-	*
-	* @return string
-	*/
-	public function getDmMediaFormForRecord($local)
-	{
-		return 'DmMediaForRecordForm';
-	}
+    if (!isset($this->embeddedForms[$formName]))
+    {
+      return $values;
+    }
+
+    /*
+     * We have a new file for an existing media.
+     * Let's create a new media
+     */
+    if($values[$formName]['file'] && $values[$formName]['id'])
+    {
+      $values[$formName]['id'] = null;
+        
+      $media = new DmMedia;
+      $media->Folder = $this->object->getDmMediaFolder();
+
+      $this->embeddedForms[$formName]->setObject($media);
+    }
+    
+    return $values;
+  }
+
+  protected function doUpdateObjectForEmbeddedMediaForm(array $values, $local, $alias)
+  {
+    $formName = $local.'_form';
+
+    if (!isset($this->embeddedForms[$formName]))
+    {
+      return;
+    }
+
+    if (!empty($values[$formName]['remove']))
+    {
+      $this->object->set($alias, null);
+    }
+    else
+    {
+      $this->object->set($alias, $this->embeddedForms[$formName]->getObject());
+    }
+  }
+
+  protected function mergeI18nForm($culture = null)
+  {
+    $this->mergeForm($this->createI18nForm());
+  }
+  
+  /**
+   * Create current i18n form
+   */
+  protected function createI18nForm($culture = null)
+  {
+    if (!$this->isI18n())
+    {
+      throw new dmException(sprintf('The model "%s" is not internationalized.', $this->getModelName()));
+    }
+
+    $i18nFormClass = $this->getI18nFormClass();
+
+    $culture = null === $culture ? dmDoctrineRecord::getDefaultCulture() : $culture;
+    
+    // translation already set, use it
+    if ($this->object->get('Translation')->contains($culture))
+    {
+      $translation = $this->object->get('Translation')->get($culture);
+    }
+    else
+    {
+      $translation = $this->object->get('Translation')->get($culture);
+      
+      // populate new translation with fallback values
+      if (!$translation->exists())
+      {
+        if($fallback = $this->object->getI18nFallBack())
+        {
+          $fallBackData = $fallback->toArray();
+          unset($fallBackData['id'], $fallBackData['lang']);
+          $translation->fromArray($fallBackData);
+        }
+      }
+    }
+
+    $i18nForm = new $i18nFormClass($translation);
+    
+    unset($i18nForm['id'], $i18nForm['lang']);
+
+    return $i18nForm;
+  }
+
+  /**
+   * Sets the current object for this form.
+   *
+   * @return dmDoctrineRecord The current object setted.
+   */
+  public function setObject(dmDoctrineRecord $record)
+  {
+    return $this->object = $record;
+  }
 }

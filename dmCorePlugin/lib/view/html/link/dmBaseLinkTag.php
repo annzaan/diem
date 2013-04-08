@@ -9,7 +9,7 @@ abstract class dmBaseLinkTag extends dmHtmlTag
   {
     parent::initialize($options);
     
-    $this->addAttributeToRemove(array('text', 'anchor', 'current_class', 'parent_class', 'current_span', 'use_beaf', 'http_secure'));
+    $this->addAttributeToRemove(array('text', 'anchor', 'current_class', 'parent_class', 'current_span', 'use_beaf'));
     
     $this->addEmptyAttributeToRemove(array('target', 'title'));
     
@@ -22,21 +22,8 @@ abstract class dmBaseLinkTag extends dmHtmlTag
       'current_class' => 'dm_current',
       'parent_class'  => 'dm_parent',
       'current_span'  => false,
-      'use_beaf'      => false,
-    	'http_secure' 	=> false
+      'use_beaf'      => false
     ));
-  }
-  
-  public function isHttpSecure()
-  {
-  	return (boolean) $this->options['http_secure'];
-  }
-  
-  public function httpSecure($secure = true)
-  {
-  	$this->options['http_secure'] = (boolean) $secure;
-  	
-  	return $this;
   }
 
   public function isCurrent()

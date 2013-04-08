@@ -9,8 +9,7 @@ generator:
     with_doctrine_route: false
     config:
       actions: ~
-      fields:
-        dm_catalogue_id: { label: Catalogue }
+      fields: {  }
       list:
         display:
           - =source
@@ -27,6 +26,7 @@ generator:
         loremize: false
       filter:
         display:
+          - id
           - dm_catalogue_id
           - source
           - target

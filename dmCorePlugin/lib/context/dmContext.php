@@ -22,16 +22,6 @@ class dmContext extends sfContext
   }
 
   /**
-   * @param string $name
-   * @param string $class
-   * @return dmContext
-   */
-  public static function getInstance($name = null, $class = __CLASS__)
-  {
-  	return parent::getInstance($name, $class);
-  }
-  
-  /**
    * Initializes the current dmContext instance.
    *
    * @param dmApplicationConfiguration $configuration  An dmApplicationConfiguration instance
@@ -292,15 +282,6 @@ class dmContext extends sfContext
     $this->dispatcher->notify(new sfEvent($this, 'dm.context.end'));
   }
 
-  public function shutdown()
-  {
-  	$this->dispatcher->notify(new sfEvent($this, 'sf.context.end.before'));
-  	
-  	parent::shutdown();
-  	
-  	$this->dispatcher->notify(new sfEvent($this, 'sf.context.end.after'));
-  }
-  
 
   public function isModuleAction($module, $action)
   {

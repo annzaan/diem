@@ -162,7 +162,6 @@ abstract class BaseDmPage extends myDoctrineRecord
               8 => 'is_secure',
               9 => 'is_indexable',
              ),
-             'length' => 7,
              ));
         $this->actAs($nestedset0);
         $this->actAs($i18n0);

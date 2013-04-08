@@ -120,7 +120,6 @@ class dmXmlSitemapGenerator extends dmConfigurable
     ->withI18n($culture)
     ->where('pTranslation.is_secure = ?', false)
     ->addWhere('pTranslation.is_active = ?', true)
-    ->addWhere('pTranslation.is_indexable = ?', true)
     ->addWhere('p.module != ? OR ( p.action != ? AND p.action != ? AND p.action != ?)', array('main', 'error404', 'search', 'signin'))
     ->orderBy('p.lft asc')
     ->fetchRecords();
@@ -144,7 +143,7 @@ class dmXmlSitemapGenerator extends dmConfigurable
     <loc>
       %s
     </loc>
-  </url>', $this->getOption('domain').'/'.(sfConfig::get('dm_i18n_prefix_url', false) ? $culture.'/' : '').$page->get('Translation')->get($culture)->get('slug'));
+  </url>', $this->getOption('domain').'/'.$page->get('Translation')->get($culture)->get('slug'));
   }
 
   protected function write($filePath, $xml)

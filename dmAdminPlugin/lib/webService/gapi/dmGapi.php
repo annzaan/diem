@@ -112,7 +112,6 @@ class dmGapi extends gapi
     }
     
     $start_index = 1;
-
     while($accounts = $this->requestAccountData($start_index++))
     {
       foreach($accounts as $account)
@@ -122,8 +121,8 @@ class dmGapi extends gapi
           return $this->reportId = $account->getProfileId();
         }
       }
-    }
-
+    } 
+    
     throw new dmGapiException('Current report not found for ga key : '.$gaKey);
   }
   

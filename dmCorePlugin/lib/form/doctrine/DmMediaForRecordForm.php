@@ -11,14 +11,12 @@ class DmMediaForRecordForm extends DmMediaForm
 
     $this->widgetSchema['id']->setAttribute('class', 'dm_media_id');
 
-    $this->validatorSchema['id'] = new sfValidatorDoctrineChoice(array('model' => 'DmMedia', 'required' => false));
-
     $this->getWidgetSchema()
     ->getFormFormatter()
     ->setDecoratorFormat("<ul class=\"dm_media_for_record_form dm_form_elements\">\n  %content%</ul>");
   }
 
-  public static function factory(myDoctrineRecord $record, $local, $alias, $required, $form)
+  public static function factory(myDoctrineRecord $record, $local, $alias, $required)
   {
     /*
      * Check first is local column has a value
@@ -33,9 +31,8 @@ class DmMediaForRecordForm extends DmMediaForm
       $media = new DmMedia;
       $media->set('dm_media_folder_id', $record->getDmMediaFolder()->get('id'));
     }
-    
-    $formClass = $form->getDmMediaFormForRecord($local);
-    $form = new $formClass($media);
+
+    $form = new self($media);
     $form->configureRequired($required);
     $form->setRecord($record);
     return $form;

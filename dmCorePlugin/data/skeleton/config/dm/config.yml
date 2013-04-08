@@ -2,7 +2,6 @@ all:
 
   i18n:
     cultures:             [ ##DIEM_CULTURE## ]        # Available cultures
-    prefix_url:           false         # Prefix URLs in front with culture
       
   cache:
     apc:                  true          # (RECOMMENDED) Use Apc if available
@@ -36,9 +35,3 @@ all:
     report_anonymous_data: ##SEND_REPORTS##         # reports anonymous data about plugins used.
                                         # http://diem-project.org/plugins will show the best plugins based on these reports.
                                         # the report request is sent only once, when a superadministrator logs in.
-dev: 
-  js:
-    compress: false
-  css:
-    compress: false
-    

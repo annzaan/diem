@@ -46,25 +46,15 @@ class dmAdminRoutingConfigHandler extends sfRoutingConfigHandler
    */
   static public function getConfiguration(array $configFiles)
   {
-    // merge two arrays but put custom routes at the beginning
-    // so that they are matched first
-    $systemRoutes = self::getDmConfiguration();
-    $userRoutes = parent::getConfiguration($configFiles);
-    foreach ($userRoutes as $key => $value) {
-      if (array_key_exists($key, $systemRoutes)) {
-        $systemRoutes[$key] = $value;
-      } else {
-        $systemRoutes = array_reverse($systemRoutes, true);
-        $systemRoutes[$key] = $value;
-        $systemRoutes = array_reverse($systemRoutes, true);
-      }
-    }
-    return $systemRoutes;
+    return array_merge(
+      self::getDmConfiguration(),
+      parent::getConfiguration($configFiles)
+    );
   }
 
   public static function getDmConfiguration()
   {
-    $moduleManager = dmContext::getInstance('admin')->getModuleManager();
+    $moduleManager = dmContext::getInstance()->getModuleManager();
     
     // homepage first
     $config = array(

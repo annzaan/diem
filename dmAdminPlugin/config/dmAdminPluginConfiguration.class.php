@@ -3,7 +3,7 @@ class dmAdminPluginConfiguration extends sfPluginConfiguration
 {
   protected static
   $helpers = array('Dm'),
-  $externalModules = array('dmUserAdmin', 'dmPermissionAdmin', 'dmGroupAdmin', 'dmRecordPermissionAdmin', 'dmRecordPermissionAssociationAdmin');
+  $externalModules = array('dmUserAdmin', 'dmPermissionAdmin', 'dmGroupAdmin');
 
   public function configure()
   {
@@ -36,12 +36,9 @@ class dmAdminPluginConfiguration extends sfPluginConfiguration
     {
       $modules[] = basename($dir);
     }
-    if($dirs = glob(dmOs::join(sfCOnfig::get('sf_plugins_dir'), '*/modules/*'), GLOB_ONLYDIR))
+    foreach(glob(dmOs::join(sfConfig::get('sf_plugins_dir'), '*/modules/*'), GLOB_ONLYDIR) as $dir)
     {
-	foreach($dirs as $dir)
-	{
-    	    $modules[] = basename($dir);
-	}
+      $modules[] = basename($dir);
     }
 
     return array_unique(array_merge($modules, self::$externalModules));

@@ -8,10 +8,8 @@ class dmSearchEngineActions extends dmAdminBaseActions
     $this->engine = $this->getService('search_engine');
     
     $this->form = $this->getSearchForm();
-    
-    $params = $request->getParameter($this->form->getName());
 
-    if ($this->query = trim($params['query']))
+    if ($this->query = trim($request->getParameter('query')))
     {
       $this->form->bind(array('query' => $this->query));
       $this->pager = $this->getSearchPager($this->query);

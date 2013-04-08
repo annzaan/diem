@@ -22,7 +22,6 @@ _tag('div#'.$baseTabId.'_items.drop_zone',
     'secure_message' => __('Requires authentication'),
     'nofollow_message' => __('No follow'),
     'depth_message' => __('Depth'),
-    'target_message' => __('Target'),
     'click_message' => __('Click to edit, drag to sort')
   )), '').
   _tag('div.dm_help.no_margin',
@@ -36,7 +35,6 @@ _tag('div#'.$baseTabId.'_advanced',
   _tag('ul.dm_form_elements',
     $form['cssClass']->renderRow().
     $form['ulClass']->renderRow().
-    $form['menuName']->renderRow().
     $form['liClass']->renderRow().
     (isset($form['menuClass']) ? $form['menuClass']->renderRow() : '')
   )

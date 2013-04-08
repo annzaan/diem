@@ -9,6 +9,7 @@
           <th><input class="sf_admin_list_batch_checkbox" type="checkbox" /></th>
 <?php endif; ?>
           [?php include_partial('<?php echo $this->getModuleName() ?>/list_th_<?php echo $this->configuration->getValue('list.layout') ?>', array('sort' => $sort)) ?]
+          <th>[?php echo __('Actions') ?]</th>
         </tr>
       </thead>
       <tfoot>
@@ -16,7 +17,8 @@
 <?php if ($this->configuration->getValue('list.batch_actions')): ?>
           <th><input class="sf_admin_list_batch_checkbox" type="checkbox" /></th>
 <?php endif; ?>
-          [?php include_partial('<?php echo $this->getModuleName() ?>/list_th_<?php echo $this->configuration->getValue('list.layout') ?>', array('sort' => $sort, 'security_manager' => $security_manager)) ?]
+          [?php include_partial('<?php echo $this->getModuleName() ?>/list_th_<?php echo $this->configuration->getValue('list.layout') ?>', array('sort' => $sort)) ?]
+          <th>[?php echo __('Actions') ?]</th>
         </tr>
       </tfoot>
       <tbody class='{toggle_url: "[?php echo £link('@'.$helper->getUrlForAction('toggleBoolean'))->getHref() ?]"}'>
@@ -27,7 +29,7 @@
               <input type="checkbox" name="ids[]" value="[?php echo $<?php echo $this->getSingularName() ?>->getPrimaryKey() ?]" class="sf_admin_batch_checkbox" />
             </td>
 <?php endif; ?>
-            [?php include_partial('<?php echo $this->getModuleName() ?>/list_td_<?php echo $this->configuration->getValue('list.layout') ?>', array('<?php echo $this->getSingularName() ?>' => $<?php echo $this->getSingularName() ?>, 'helper' => $helper, 'security_manager' => $security_manager)) ?]
+            [?php include_partial('<?php echo $this->getModuleName() ?>/list_td_<?php echo $this->configuration->getValue('list.layout') ?>', array('helper' => $helper, '<?php echo $this->getSingularName() ?>' => $<?php echo $this->getSingularName() ?>)) ?]
           </tr>
         [?php endforeach; ?]
       </tbody>

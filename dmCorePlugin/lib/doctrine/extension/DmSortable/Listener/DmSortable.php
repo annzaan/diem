@@ -15,23 +15,16 @@ class Doctrine_Template_Listener_DmSortable extends Doctrine_Record_Listener
 
   public function postInsert(Doctrine_Event $event)
   {
-    if (is_null($event->getInvoker()->get('position')))
+    if ('first' === $this->_options['new'])
     {
-      if ('first' === $this->_options['new'])
-      {
-        $position = $event->getInvoker()->getTable()->createQuery('r')
-        ->select('MIN(r.position)')
-        ->fetchValue()
-        - 1;
-      }
-      else
-      {
-        $position = $event->getInvoker()->get('id');
-      }
+      $position = $event->getInvoker()->getTable()->createQuery('r')
+      ->select('MIN(r.position)')
+      ->fetchValue()
+      - 1;
     }
     else
     {
-      $position = $event->getInvoker()->get('position');
+      $position = $event->getInvoker()->get('id');
     }
     
     $event->getInvoker()->set('position', $position);

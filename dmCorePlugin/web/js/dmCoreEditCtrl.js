@@ -28,14 +28,14 @@
     dialog: function(options)
     {
       var opt = $.extend($.ui.dialog.defaults, {
-        zIndex: 1000,
+        zIndex: 100,
         dragStart: function(e)
         {
-          $(e.target).parent().css('opacity', 0.5);
+          $(e.target).hide().parent().css('opacity', 0.5);
         },
         dragStop: function(e)
         {
-          $(e.target).parent().css('opacity', 1);
+          $(e.target).show().parent().css('opacity', 1);
         },
         resizable: false
     }, options || {});

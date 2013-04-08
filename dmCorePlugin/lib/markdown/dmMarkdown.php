@@ -7,45 +7,45 @@ class dmMarkdown extends MarkdownExtra_Parser
   protected
   $headerIdStack,
   $helper;
-
+  
   public function __construct(dmHelper $helper, array $options = array())
   {
     $this->helper = $helper;
-
+    
     parent::MarkdownExtra_Parser();
-
+    
     $this->initialize($options);
   }
-
+  
   public function initialize(array $options)
   {
     $this->options = array_merge($this->getDefaultOptions(), $options);
   }
-
+  
   public function getDefaultOptions()
   {
     return array(
       'auto_header_id' => true
     );
   }
-
+  
   public function getOptions()
   {
     return $this->options;
   }
-
+  
   public function setOption($name, $value)
   {
     $this->options[$name] = $value;
 
     return $this;
   }
-
+  
   public function getOption($name, $default = null)
   {
     return isset($this->options[$name]) ? $this->options[$name] : $default;
   }
-
+  
   public function reset()
   {
     $this->headerIdStack = array(
@@ -56,14 +56,14 @@ class dmMarkdown extends MarkdownExtra_Parser
       5 => null
     );
   }
-
+  
   public function toHtml($text)
   {
     $this->reset();
-
+    
     return $this->postTransform($this->transform($this->preTransform($text)));
   }
-
+  
   public function toText($text)
   {
     return strip_tags($this->toHtml($text));
@@ -79,62 +79,57 @@ class dmMarkdown extends MarkdownExtra_Parser
 
     // add two spaces before every line end to allow new lines
     $text = str_replace("\n", "  \n", $text);
-
+    
     return $text;
   }
-
+  
   protected function postTransform($html)
   {
     // remove first and last line feed
     $html = trim($html, "\n");
-
+    
     // add the "dm_first_p" css class to the first p
     $html = dmString::str_replace_once('<p>', '<p class="dm_first_p">', $html);
-
+    
     return $html;
-  }
-
-  function _doHeaders_attr($attr) {
-    if (empty($attr))  return "";
-      return " id=\"$attr\"";
   }
   
   public function _doHeaders_callback_atx($matches)
   {
     $level = strlen($matches[1]);
-
+    
     $attr  = $this->_doHeaders_attr($id =& $matches[3]);
-
+    
     $text = $this->runSpanGamut($matches[2]);
-
+    
     if ($this->options['auto_header_id'] && false === strpos($attr, 'id="'))
     {
       $id = '';
-
+      
       if(1 !== $level && !empty($this->headerIdStack[$level-1]))
       {
         $id = $this->headerIdStack[$level-1].':';
       }
-
+      
       $id .= dmString::slugify($text);
-
+      
       if (!empty($id))
       {
         $attr = ' id="'.$id.'"';
-
+        
         if ($level < 6)
         {
           $this->headerIdStack[$level] = $id;
         }
       }
     }
-
+    
     $block = "<h$level$attr>".$text."</h$level>";
-
+    
     return "\n" . $this->hashBlock($block) . "\n\n";
   }
-
-
+  
+  
   /**
    * Link system replacement
    */
@@ -146,7 +141,7 @@ class dmMarkdown extends MarkdownExtra_Parser
     #
     if ($this->in_anchor) return $text;
     $this->in_anchor = true;
-
+    
     #
     # Next, inline-style links: [link text](url "optional title")
     #
@@ -181,44 +176,37 @@ class dmMarkdown extends MarkdownExtra_Parser
     $this->in_anchor = false;
     return $text;
   }
-
+  
   public function _doAnchors_inline_callback($matches)
   {
     $text   = $this->runSpanGamut($matches[2]);
     $url    = $matches[3] == '' ? $matches[4] : $matches[3];
     $title  = $matches[7];
     $attrs  = $matches[9];
-
+    
     if (false !== strpos($url, '#'))
     {
       $anchor = preg_replace('{.*\#([\w\d\-\:]+).*}i', '$1', $url);
-
+      
       $url    = dmString::str_replace_once('#'.$anchor, '', $url);
     }
     else
     {
       $anchor = null;
     }
-
-    if (strlen($url) == 0 && $anchor)
+    
+    $link = $this->helper->link($url)->text($text);
+    
+    if ($anchor)
     {
-      $link = $this->helper->link('#'.$anchor)->text($text);
+      $link->anchor($anchor);
     }
-    else
-    {
-      $link = $this->helper->link($url)->text($text);
-
-      if ($anchor)
-      {
-        $link->anchor($anchor);
-      }
-    }
-
+    
     if ($title)
     {
       $link->title($title);
     }
-
+    
     if ($attrs)
     {
       $link->set($attrs);
@@ -226,11 +214,11 @@ class dmMarkdown extends MarkdownExtra_Parser
 
     return $this->hashPart($link->render());
   }
-
+  
   /**
    * Image system replacement
    */
-
+  
   public function doImages($text)
   {
     #
@@ -261,7 +249,7 @@ class dmMarkdown extends MarkdownExtra_Parser
 
     return $text;
   }
-
+  
   public function _doImages_inline_callback($matches)
   {
     $alt   = $matches[2];
@@ -269,12 +257,12 @@ class dmMarkdown extends MarkdownExtra_Parser
     $attrs = $matches[6];
 
     $tag = $this->helper->media($url);
-
+    
     if ($alt)
     {
       $tag->alt($alt);
     }
-
+    
     if($attrs)
     {
       if(strpos($attrs, ' '))
@@ -289,23 +277,29 @@ class dmMarkdown extends MarkdownExtra_Parser
       {
         list($css, $size) = array(null, $attrs);
       }
-
+      
       if ($css)
       {
         $tag->set($css);
       }
-
+      
       if($size)
       {
-        if (false !== strpos($size, 'x'))
+        if (substr_count($size, 'x') == 2)
+        {
+          list($width, $height, $method) = explode('x', $size);
+        }
+        elseif (false !== strpos($size, 'x'))
         {
           list($width, $height) = explode('x', $size);
+          $method = false;
         }
         else
         {
           $width = $height = $size;
+          $method = false;
         }
-
+        
         if($width)
         {
           $tag->width($width);
@@ -314,17 +308,21 @@ class dmMarkdown extends MarkdownExtra_Parser
         {
           $tag->height($height);
         }
+        if ($method)
+        {
+          $tag->method($method);
+        }
       }
     }
-
+    
     return $this->hashPart($tag->render());
   }
-
+  
   protected function cleanText($text)
   {
     return str_replace("\r\n", "\n", $text);
   }
-
+  
   /**
    * Very fast function to translate markdown text to pure text without formatting
    * This function is less efficient than toText
@@ -333,10 +331,10 @@ class dmMarkdown extends MarkdownExtra_Parser
   {
     // remove common formatting
     $text = str_replace(array('-', '*', '#'), '', $text);
-
+    
     // remove links and images
     $text = preg_replace('#!?\[([^\]]*)\]\([^\)]*\)#um', '$1', $text);
-
+    
     return $text;
   }
 }

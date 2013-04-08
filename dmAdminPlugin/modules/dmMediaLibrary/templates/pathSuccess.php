@@ -32,14 +32,7 @@ else
 
 if ($children = $folder->getNode()->getChildren())
 {
-  $arrChildren = array();
-  foreach($children as $f) {
-    $arrChildren[$f->getName()] = $f;
-  }
-
-  ksort($arrChildren);
-
-  foreach($arrChildren as $f)
+  foreach($children as $f)
   {
     echo _tag('li.folder',
       _link($sf_context->getRouting()->getMediaUrl($f))->text(

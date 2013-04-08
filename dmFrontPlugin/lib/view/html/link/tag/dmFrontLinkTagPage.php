@@ -49,6 +49,7 @@ class dmFrontLinkTagPage extends dmFrontLinkTag
     return $this->currentPage && $this->currentPage->get('id') === $this->page->get('id');
   }
 
+<<<<<<< HEAD
   public function isCurrentStrict()
   {
     $reqContext = $this->requestContext;
@@ -67,6 +68,8 @@ class dmFrontLinkTagPage extends dmFrontLinkTag
     return ltrim($relativeToRootRequestUri,'/') == $this->currentPage->getSlug() || $relativeToRootRequestUri == 'http://'; //fix CLI tests...
   }
 
+=======
+>>>>>>> c3a3392eeaaf609356f1a404ff87d4a5bf5a7ff3
   public function isParent()
   {
     return $this->currentPage && $this->currentPage->getNode()->isDescendantOf($this->page);
@@ -75,19 +78,12 @@ class dmFrontLinkTagPage extends dmFrontLinkTag
   protected function getBaseHref()
   {
     $pageSlug = $this->page->_getI18n('slug');
-    $basePrefix = $this->getHrefPrefix();
     
-    $prefixI18n = sfConfig::get('dm_i18n_prefix_url');
-    if($prefixI18n){
-      $culture = $this->user->getCulture();
-      $baseHref = $basePrefix . '/' . $culture . ($pageSlug ? '/' .$pageSlug : '');
-    }else{
-      $baseHref = $this->getHrefPrefix().($pageSlug ? '/'.$pageSlug : '');
-    }
+    $baseHref = $this->getHrefPrefix().($pageSlug ? '/'.$pageSlug : '');
     
     if(empty($baseHref))
     {
-      $baseHref = $prefixI18n ? '/'.$culture : '/';
+      $baseHref = '/';
     }
     
     return $baseHref;
@@ -139,11 +135,11 @@ class dmFrontLinkTagPage extends dmFrontLinkTag
       }
 
       // current page
-      if($this->isCurrent())
+      if($this->isCurrent() && empty($attributes['anchor']))
       {
         $attributes['class'][] = $attributes['current_class'];
           
-        if(empty($attributes['anchor']) && $attributes['current_span'] && $this->isCurrentStrict())
+        if($attributes['current_span'])
         {
           $attributes['tag'] = 'span';
         }

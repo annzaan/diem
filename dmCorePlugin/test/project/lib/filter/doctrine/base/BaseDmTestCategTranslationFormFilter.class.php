@@ -12,6 +12,7 @@ abstract class BaseDmTestCategTranslationFormFilter extends BaseFormFilterDoctri
 {
   public function setup()
   {
+<<<<<<< HEAD
 
 
 		if($this->needsWidget('name')){
@@ -34,6 +35,17 @@ abstract class BaseDmTestCategTranslationFormFilter extends BaseFormFilterDoctri
 			$this->setValidator('dm_test_categ_list', new sfValidatorDoctrineChoice(array('multiple' => false, 'model' => 'DmTestCateg', 'required' => true)));
 		}
 
+=======
+    $this->setWidgets(array(
+      'name'      => new sfWidgetFormDmFilterInput(),
+      'is_active' => new sfWidgetFormChoice(array('choices' => array('' => $this->getI18n()->__('yes or no', array(), 'dm'), 1 => $this->getI18n()->__('yes', array(), 'dm'), 0 => $this->getI18n()->__('no', array(), 'dm')))),
+    ));
+
+    $this->setValidators(array(
+      'name'      => new sfValidatorPass(array('required' => false)),
+      'is_active' => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
+    ));
+>>>>>>> c3a3392eeaaf609356f1a404ff87d4a5bf5a7ff3
     
 
     $this->widgetSchema->setNameFormat('dm_test_categ_translation_filters[%s]');

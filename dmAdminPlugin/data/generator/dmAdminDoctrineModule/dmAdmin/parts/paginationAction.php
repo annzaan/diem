@@ -1,45 +1,23 @@
-  /**
-	 * @return dmDoctrinePager
-	 */
-  public function getPager()
+  protected function getPager()
   {
-  	if(null == $this->pager)
-  	{
-	    $this->pager = $this->configuration->getPager('<?php echo $this->getModelClass() ?>');
-	    $this->pager->setQuery($this->buildQuery());
-	    $this->pager->setPage($this->getPage());
-	    $this->pager->init();
-		}
-    return $this->pager;
+    $pager = $this->configuration->getPager('<?php echo $this->getModelClass() ?>');
+    $pager->setQuery($this->buildQuery());
+    $pager->setPage($this->getPage());
+    $pager->init();
+
+    return $pager;
   }
 
-  /**
-	 * @return boolean
-	 */
-  public function hasPager()
-  {
-  	return $this->pager ? true : false;
-  }
-
-	/**
-	 * @param int $page
-	 */
   protected function setPage($page)
   {
     $this->getUser()->setAttribute('<?php echo $this->getModuleName() ?>.page', $page, 'admin_module');
   }
 
-  /**
-	 * @return int
-	 */
-  public function getPage()
+  protected function getPage()
   {
     return $this->getUser()->getAttribute('<?php echo $this->getModuleName() ?>.page', 1, 'admin_module');
   }
 
-	/**
-	 * @return myDoctrineQuery
-	 */ 
   protected function buildQuery()
   {
     $tableMethod = $this->configuration->getTableMethod();
@@ -50,7 +28,7 @@
     }
 
     $this->filters->setTableMethod($tableMethod);
-		$this->getDmModule()->getTable()->setOption('admin.query.relations', $this->getRelationsAlias());
+
     $query = $this->filters->buildQuery($this->getFilters());
 <?php else: ?>
     $query = dmDb::table('<?php echo $this->getModelClass() ?>')
@@ -65,8 +43,6 @@
     $this->addSearchQuery($query);
 
     $this->addSortQuery($query);
-    
-    $this->addRecordPermissionQuery($query);
     
     $event = $this->dispatcher->filter(new sfEvent($this, 'admin.build_query'), $query);
     $query = $event->getReturnValue();

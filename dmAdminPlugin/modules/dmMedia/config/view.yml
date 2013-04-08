@@ -1,4 +1,0 @@
-gallerySuccess:
-
-  stylesheets: [ lib.ui-dialog, admin.breadCrumb, admin.media ]
-  javascripts: [ lib.ui-dialog, lib.form ]

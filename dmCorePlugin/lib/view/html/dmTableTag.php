@@ -8,8 +8,7 @@ class dmTableTag extends dmHtmlTag
   $body,
   $foot,
   $useStrip = false,
-  $stripCount,
-  $caption;
+  $stripCount;
   
   public function __construct(dmHelper $helper)
   {
@@ -50,25 +49,12 @@ class dmTableTag extends dmHtmlTag
   public function render()
   {
     return $this->helper->tag('table', $this->options,
-      $this->renderCaption().
       $this->renderHead().
       $this->renderFoot().
       $this->renderBody()
     );
   }
-
-  public function renderCaption()
-  {
-    if(is_null($this->caption))
-    {
-      return '';
-    }
-    else
-    {
-      return $this->helper->tag('caption', $this->caption);
-    }
-  }
-
+  
   public function renderHead()
   {
     return $this->renderPart($this->head, 'thead', 'th');
@@ -117,12 +103,6 @@ class dmTableTag extends dmHtmlTag
     }
     
     return $open.'<'.$cellTag.'>'.implode('</'.$cellTag.'><'.$cellTag.'>', $row).'</'.$cellTag.'></tr>';
-  }
-
-  public function caption($caption)
-  {
-    $this->caption = $caption;
-    return $this;
   }
 
   public function head()

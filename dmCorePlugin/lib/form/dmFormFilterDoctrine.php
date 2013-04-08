@@ -3,74 +3,6 @@
 abstract class dmFormFilterDoctrine extends sfFormFilterDoctrine
 {
 
-  protected function setupNestedSet() {
-
-    //die(print_r(get_class($this->getTable()),1));
-    if ($this->getTable() instanceof myDoctrineTable) {
-
-      // unset NestedSet columns not needed as added in the getAutoFieldsToUnset() method
-
-      $this->updateNestedSetWidget($this->getTable(), 'nested_set_parent_id', 'Child of');
-
-      // check all relations for NestedSet
-      foreach ($this->getTable()->getRelationHolder()->getAll() as $relation) {
-        if ($relation->getTable() instanceof dmDoctrineTable && $relation->getTable()->isNestedSet()) {
-          // check for many to many
-          $fieldname = $relation->getType()
-                  ? dmString::underscore($relation->getAlias()) . '_list'
-                  : $relation->getLocalColumnName()
-                  ;
-          $this->updateNestedSetWidget($relation->getTable(), $fieldname);
-        }
-      }
-    }
-
-  }
-
-  protected function updateNestedSetWidget(dmDoctrineTable $table, $fieldname = null, $label = null)
-  {
-    if ($table->isNestedSet()) {
-      if (null === $fieldname) {
-        $fieldname = 'nested_set_parent_id';
-      }
-      // create if not exists
-      if (!($this->widgetSchema[$fieldname] instanceof sfWidgetFormDoctrineChoice)) {
-        $this->widgetSchema[$fieldname] = new sfWidgetFormDoctrineChoice(array('model' => $table->getComponentName()));
-      }
-      if (!($this->validatorSchema[$fieldname] instanceof sfValidatorDoctrineChoice)) {
-        $this->validatorSchema[$fieldname] = new sfValidatorDoctrineChoice(array('model' => $table->getComponentName()));
-      }
-
-      if (null !== $label) {
-        $this->widgetSchema[$fieldname]->setLabel('$label');
-      }
-
-      // set sorting
-      $orderBy = 'lft';
-      if ($table->getTemplate('NestedSet')->getOption('hasManyRoots', false)) {
-        $orderBy = $table->getTemplate('NestedSet')->getOption('rootColumnName', 'root_id') . ', ' . $orderBy;
-      }
-
-      $this->widgetSchema[$fieldname]->setOptions(array_merge(
-              $this->widgetSchema[$fieldname]->getOptions(),
-              array(
-                  'method' => 'getNestedSetIndentedName',
-                  'order_by' => array($orderBy, ''),
-        )));
-
-    }
-  }
-
-  public function setup() {
-
-
-    $this->setupNestedSet();
-
-    parent::setup();
-
-  }
-
-
   protected function mergeI18nForm($culture = null)
   {
     $this->mergeForm($this->createI18nForm());
@@ -93,10 +25,7 @@ abstract class dmFormFilterDoctrine extends sfFormFilterDoctrine
 
     $i18nFormClass = $this->getI18nFormClass();
 
-    $options = array();
-    if($widgets = $this->getOption('widgets')) $options['widgets'] = $widgets;
-    
-    $i18nForm = new $i18nFormClass(array(), $options);
+    $i18nForm = new $i18nFormClass();
 
     unset($i18nForm['id'], $i18nForm['lang']);
 
@@ -132,15 +61,8 @@ abstract class dmFormFilterDoctrine extends sfFormFilterDoctrine
   protected function addEnumQuery(Doctrine_Query $query, $field, $value)
   {
     $fieldName = $this->getFieldName($field);
-	 $counter = 0;
-	 $enumConditions='';
-	 $rootAlias = $this->getRootAlias($query, $fieldName);
-	 foreach ($value as $val) {
-		 $counter++;
-		 $glue = $counter < count($value) ? ' OR ' : '';
-		 $enumConditions .= sprintf('%s.%s = ?'.$glue , $rootAlias, $fieldName);
-	 }
-    $query->addWhere($enumConditions, $value);
+
+    $query->addWhere(sprintf('%s.%s = ?', $this->getRootAlias($query, $fieldName), $fieldName), $value);
   }
 
   protected function addTextQuery(Doctrine_Query $query, $field, $values)

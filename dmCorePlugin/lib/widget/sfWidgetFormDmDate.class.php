@@ -51,7 +51,7 @@ class sfWidgetFormDmDate extends sfWidgetFormI18nDate
       $formattedValue = strtr(
         $this->getOption('format'),
         array(
-          '%year%' => sprintf('%02d', $value['year']),
+          '%year%' => sprintf('%04d', $value['year']),
           '%month%' => sprintf('%02d', $value['month']),
           '%day%' => sprintf('%02d', $value['day']),
         )
@@ -65,7 +65,6 @@ class sfWidgetFormDmDate extends sfWidgetFormI18nDate
     return $this->renderTag(
       'input',
       array(
-        'type' => 'text',
         'name' => $name,
         'size' => 10,
         'id' => $this->generateId($name),

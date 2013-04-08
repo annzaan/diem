@@ -10,7 +10,7 @@
 abstract class PluginDmPageForm extends BaseDmPageForm
 {
   
-  public function getAutoFieldsToUnset()
+  protected function getAutoFieldsToUnset()
   {
     return array('created_at', 'updated_at');
   }

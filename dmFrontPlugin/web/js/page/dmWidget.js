@@ -25,7 +25,7 @@ $.widget('ui.dmWidget', {
       url:          $.dm.ctrl.getHref('+/dmWidget/edit'),
       data:         {widget_id: widget.getId()},
       title:        $('a.dm_widget_edit', widget.element).tipsyTitle(),
-      width:        '600', // this should be revised and if possible - made dependant on content's width
+      width:        600,
       'class':      'dm_widget_edit_dialog_wrap '+dialogClass,
       resizable:    true,
       resize:       function(event, ui)
@@ -64,7 +64,7 @@ $.widget('ui.dmWidget', {
       if (restoreState.activeElementName)
       {
         var s = ':input[name="'+restoreState.activeElementName+'"]:visible';
-        var activeElement = $form.find(s).filter('input[type=text], textarea');
+        var activeElement = $form.find(s);
         if(activeElement.length > 0)
         {
           restoreState.activeSelection = [activeElement[0].selectionStart, activeElement[0].selectionEnd];
@@ -295,12 +295,12 @@ $.widget('ui.dmWidget', {
           iframe: true,
           speed: 200,
           opacity: 0.5,
-          open: true,
           onClosed: function()
           {
             self.reload();
           }
-        });
+        })
+        .trigger('click');
 
         $button.unblock();
 
@@ -320,10 +320,11 @@ $.widget('ui.dmWidget', {
   {
     var self = this;
     
-    if (this.element.attr('id') != undefined)
-    {
-      this.id = this.element.attr('id').substring(10);
+    if (!this.element.attr('id')) {
+      return '';
     }
+    
+    this.id = this.element.attr('id').substring(10);
     
     $('> a.dm_widget_edit, > a.dm_widget_fast_edit', this.element).click(function() {
       if (!self.element.hasClass('dm_dragging')) {

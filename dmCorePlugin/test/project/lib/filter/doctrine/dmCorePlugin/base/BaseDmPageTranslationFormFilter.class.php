@@ -12,7 +12,20 @@ abstract class BaseDmPageTranslationFormFilter extends BaseFormFilterDoctrine
 {
   public function setup()
   {
+    $this->setWidgets(array(
+      'slug'         => new sfWidgetFormDmFilterInput(),
+      'name'         => new sfWidgetFormDmFilterInput(),
+      'title'        => new sfWidgetFormDmFilterInput(),
+      'h1'           => new sfWidgetFormDmFilterInput(),
+      'description'  => new sfWidgetFormDmFilterInput(),
+      'keywords'     => new sfWidgetFormDmFilterInput(),
+      'auto_mod'     => new sfWidgetFormDmFilterInput(),
+      'is_active'    => new sfWidgetFormChoice(array('choices' => array('' => $this->getI18n()->__('yes or no', array(), 'dm'), 1 => $this->getI18n()->__('yes', array(), 'dm'), 0 => $this->getI18n()->__('no', array(), 'dm')))),
+      'is_secure'    => new sfWidgetFormChoice(array('choices' => array('' => $this->getI18n()->__('yes or no', array(), 'dm'), 1 => $this->getI18n()->__('yes', array(), 'dm'), 0 => $this->getI18n()->__('no', array(), 'dm')))),
+      'is_indexable' => new sfWidgetFormChoice(array('choices' => array('' => $this->getI18n()->__('yes or no', array(), 'dm'), 1 => $this->getI18n()->__('yes', array(), 'dm'), 0 => $this->getI18n()->__('no', array(), 'dm')))),
+    ));
 
+<<<<<<< HEAD
 
 		if($this->needsWidget('slug')){
 			$this->setWidget('slug', new sfWidgetFormDmFilterInput());
@@ -66,6 +79,20 @@ abstract class BaseDmPageTranslationFormFilter extends BaseFormFilterDoctrine
 			$this->setValidator('dm_page_list', new sfValidatorDoctrineChoice(array('multiple' => false, 'model' => 'DmPage', 'required' => true)));
 		}
 
+=======
+    $this->setValidators(array(
+      'slug'         => new sfValidatorPass(array('required' => false)),
+      'name'         => new sfValidatorPass(array('required' => false)),
+      'title'        => new sfValidatorPass(array('required' => false)),
+      'h1'           => new sfValidatorPass(array('required' => false)),
+      'description'  => new sfValidatorPass(array('required' => false)),
+      'keywords'     => new sfValidatorPass(array('required' => false)),
+      'auto_mod'     => new sfValidatorPass(array('required' => false)),
+      'is_active'    => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
+      'is_secure'    => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
+      'is_indexable' => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
+    ));
+>>>>>>> c3a3392eeaaf609356f1a404ff87d4a5bf5a7ff3
     
 
     $this->widgetSchema->setNameFormat('dm_page_translation_filters[%s]');

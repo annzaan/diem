@@ -127,6 +127,7 @@ class dmAdminGeneratorActions extends dmAdminBaseActions
 
     return $this->renderText($view->renderList());
   }
+<<<<<<< HEAD
 
   public function executeMove(dmWebRequest $request)
   {
@@ -159,4 +160,6 @@ class dmAdminGeneratorActions extends dmAdminBaseActions
 
     return $this->renderText('ok');
   }
+=======
+>>>>>>> c3a3392eeaaf609356f1a404ff87d4a5bf5a7ff3
 }

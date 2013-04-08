@@ -12,6 +12,7 @@ abstract class BaseDmTestDomainTranslationFormFilter extends BaseFormFilterDoctr
 {
   public function setup()
   {
+<<<<<<< HEAD
 
 
 		if($this->needsWidget('title')){
@@ -42,6 +43,21 @@ abstract class BaseDmTestDomainTranslationFormFilter extends BaseFormFilterDoctr
 			$this->setValidator('updated_by_list', new sfValidatorDoctrineChoice(array('multiple' => false, 'model' => 'DmUser', 'required' => true)));
 		}
 
+=======
+    $this->setWidgets(array(
+      'title'      => new sfWidgetFormDmFilterInput(),
+      'is_active'  => new sfWidgetFormChoice(array('choices' => array('' => $this->getI18n()->__('yes or no', array(), 'dm'), 1 => $this->getI18n()->__('yes', array(), 'dm'), 0 => $this->getI18n()->__('no', array(), 'dm')))),
+      'created_by' => new sfWidgetFormDoctrineChoice(array('model' => 'DmUser', 'add_empty' => true)),
+      'updated_by' => new sfWidgetFormDoctrineChoice(array('model' => 'DmUser', 'add_empty' => true)),
+    ));
+
+    $this->setValidators(array(
+      'title'      => new sfValidatorPass(array('required' => false)),
+      'is_active'  => new sfValidatorChoice(array('required' => false, 'choices' => array('', 1, 0))),
+      'created_by' => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('CreatedBy'), 'column' => 'id')),
+      'updated_by' => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('UpdatedBy'), 'column' => 'id')),
+    ));
+>>>>>>> c3a3392eeaaf609356f1a404ff87d4a5bf5a7ff3
     
 
     $this->widgetSchema->setNameFormat('dm_test_domain_translation_filters[%s]');

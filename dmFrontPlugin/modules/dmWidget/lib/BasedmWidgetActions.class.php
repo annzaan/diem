@@ -229,8 +229,8 @@ class BasedmWidgetActions extends dmFrontBaseActions
 
     return $this->renderAsync(array(
       'html'  => $this->getService('page_helper')->renderWidget($widgetArray),
-      'css'   => $css,
-      'js'    => $js
+      'css'   => $js,
+      'js'    => $css
     ), true);
   }
 

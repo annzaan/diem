@@ -17,10 +17,9 @@ abstract class PluginDmPageView extends BaseDmPageView
   {
     if (!$layout = $this->_get('Layout'))
     {
-      $this
-      ->set('Layout', dmDb::table('DmLayout')->findFirstOrCreate())
-      ->save()
-      ;
+      $layout = dmDb::table('DmLayout')->findFirstOrCreate();
+      $this->set('Layout', $layout);
+      $this->save();
     }
     
     return $layout;
@@ -50,7 +49,7 @@ abstract class PluginDmPageView extends BaseDmPageView
   {
     parent::postDelete($event);
 
-    $this->get('Areas')->delete();
+    $this->Areas->delete();
   }
 
 }

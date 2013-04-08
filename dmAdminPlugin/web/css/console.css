@@ -38,11 +38,6 @@ div.console div.dm_box_inner
   display: block;
   color: #fff;
 }
-#dm_lines li span
-{
-  line-height: 16px;
-  display: inline-block;
-}
 #dm_lines li.dm_command_intro
 {
 }

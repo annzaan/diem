@@ -23,8 +23,6 @@ js:
     diagram:          dmAdminDiagram
     ping:             dmAdminPing
     pageTree:         dmAdminPageTree
-    modelTree:        dmAdminModelTree
-    catalogue:        dmAdminCatalogue
 
 css:
 

@@ -7,20 +7,18 @@ class dmAdminRelatedRecordsView extends dmConfigurable
   $helper,
   $routing,
   $i18n,
-  $user,
   $record,
   $alias,
   $module,
   $foreignModule,
   $foreignRecords;
 
-  public function __construct(dmModuleManager $moduleManager, dmHelper $helper, sfRouting $routing, dmI18n $i18n, $user, array $options)
+  public function __construct(dmModuleManager $moduleManager, dmHelper $helper, sfRouting $routing, dmI18n $i18n, array $options)
   {
     $this->moduleManager  = $moduleManager;
     $this->helper         = $helper;
     $this->routing        = $routing;
     $this->i18n           = $i18n;
-    $this->user 					= $user;
 
     $this->initialize($options);
   }
@@ -28,7 +26,8 @@ class dmAdminRelatedRecordsView extends dmConfigurable
   public function getDefaultOptions()
   {
     return array(
-      'max'   => 5
+      'max'   => 5,
+      'renderer' => '__toString'
     );
   }
 
@@ -98,7 +97,7 @@ class dmAdminRelatedRecordsView extends dmConfigurable
       if($this->getOption('foreign_has_route'))
       {
         $html .= $this->helper->link($foreignRecord)
-        ->text($foreignRecord->__toString())
+        ->text($foreignRecord->{$this->getOption('renderer')}())
         ->set('.associated_record.s16right.s16_arrow_up_right_medium');
       }
       else
@@ -134,7 +133,7 @@ class dmAdminRelatedRecordsView extends dmConfigurable
   {
     $html = '<ul>';
 
-    if($this->getOption('new') && $this->record->getTable()->getRelationHolder()->get($this->alias)->getTable()->getDmModule()->getSecurityManager()->userHasCredentials('new', $this->record))
+    if($this->getOption('new'))
     {
       $html .= '<li>'.$this->renderNewLink().'</li>';
     }
@@ -163,17 +162,10 @@ class dmAdminRelatedRecordsView extends dmConfigurable
     {
       $link->param('defaults['.$this->relation->getForeign().']', $this->record->get('id'));
     }
-    elseif($this->relation instanceof Doctrine_Relation_Association)
-    {
-      $opposite = $this->relation['localTable']->getAssociationOppositeRelation($this->relation);
-      if($opposite){
-        $link->param('defaults['.dmString::tableize($opposite->getAlias()) . '_list][]', $this->record->get('id'));
-      }
-    }
 
     return $link->render();
   }
-  
+
   protected function renderSortLink()
   {
     return $this->helper->link(array(

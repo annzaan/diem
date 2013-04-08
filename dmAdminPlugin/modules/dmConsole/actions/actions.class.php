@@ -30,11 +30,10 @@ class dmConsoleActions extends dmAdminBaseActions
     if (substr($command, 0, 2) == "sf")
     {
       $command = substr($command, 3);
-      $exec = sprintf('%s "%s" %s --color', sfToolkit::getPhpCli(), dmProject::getRootDir().'/symfony', $command);
+      $exec = sprintf('%s "%s" %s', sfToolkit::getPhpCli(), dmProject::getRootDir().'/symfony', $command);
     }
     else
     {
-      $options = substr(trim($command), 0, 2) == 'll' ||  substr(trim($command), 0, 2) == 'ls' ? '--color' : '' ;
       $parts = explode(" ", $command);
       $parts[0] = dmArray::get($this->getAliases(), $parts[0], $parts[0]);
       $command = implode(" ", $parts);
@@ -45,16 +44,21 @@ class dmConsoleActions extends dmAdminBaseActions
           "%s<li>This command is not available. You can do: <strong>%s</strong></li>",
           $this->renderCommand($command), implode(' ', $this->getCommands())
         ));
-      $exec = sprintf("%s $options", $command);
+      $exec = sprintf('%s', $command);
     }
 
     ob_start();
     passthru($exec.' 2>&1', $return);
-    $raw = dmAnsiColorFormatHtmlRenderer::render(ob_get_clean());
+    $raw = ob_get_clean();
+    
+    if ($return > 0)
+    {
+      return $this->renderText($this->renderCommand($command)."<li class='dm_result_command'>'.$raw.'</li>");
+    }
     $arr = explode("\n", $raw);
     $res = $this->renderCommand($command);
     foreach($arr as $a)
-      $res .= "<li class='dm_result_command'><pre>".$a."</pre></li>";
+      $res .= "<li class='dm_result_command'>".$a."</li>";
     return $this->renderText($res);
   }
   

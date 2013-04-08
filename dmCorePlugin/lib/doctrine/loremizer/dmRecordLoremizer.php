@@ -175,7 +175,6 @@ class dmRecordLoremizer extends dmConfigurable
         break;
       case 'float':
       case 'decimal':
-      case 'double':
         $val = mt_rand(0, pow(10, $column['length']) - 1)/pow(10, dmArray::get($column, 'scale', 2));
         break;
       default:

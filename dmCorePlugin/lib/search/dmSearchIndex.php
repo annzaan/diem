@@ -160,7 +160,7 @@ class dmSearchIndex extends dmSearchIndexCommon
       }
 
       ++$pagerPage;
-      $pager->setPage($pagerPage)->init(true);
+      $pager->setPage($pagerPage)->init();
     }
     
     $user->setCulture($oldCulture);

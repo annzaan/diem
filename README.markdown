@@ -16,8 +16,4 @@ Diem is, and will always be, entirely free and published under the MIT license.
 Documentation
 -------------
 
-Please see to the online documentation : 
-
-[Entry-level documentation](http://diem-project.org/)
-
-[High-level documentation](http://bugs.diem-project.org/projects/diem-project/wiki) **work in progress**
+Please see to the online documentation : [Diem documentation](http://diem-project.org/)

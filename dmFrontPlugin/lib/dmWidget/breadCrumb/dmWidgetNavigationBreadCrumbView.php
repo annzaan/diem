@@ -45,17 +45,7 @@ class dmWidgetNavigationBreadCrumbView extends dmWidgetPluginView
   protected function getPages($includeCurrent = true)
   {
     $treeObject = dmDb::table('DmPage')->getTree();
-    
-    $baseQuery = dmDb::table('DmPage')
-                 ->createQuery('p')
-                 ->withI18n();
-    
-    if (!isset($this->compiledVars['includeInactivePages']) || !$this->compiledVars['includeInactivePages'])
-    {
-      $baseQuery->where('pTranslation.is_active = ?', true);
-    }
-    
-    $treeObject->setBaseQuery($baseQuery);
+    $treeObject->setBaseQuery(dmDb::table('DmPage')->createQuery('p')->withI18n());
 
     if(!$currentPage = $this->context->getPage())
     {
@@ -63,7 +53,7 @@ class dmWidgetNavigationBreadCrumbView extends dmWidgetPluginView
     }
 
     $ancestors = $currentPage->getNode()->getAncestors();
-    
+
     $ancestors = $ancestors ? $ancestors : array();
 
     $treeObject->resetBaseQuery();
@@ -76,7 +66,7 @@ class dmWidgetNavigationBreadCrumbView extends dmWidgetPluginView
     $pages = array();
     foreach($ancestors as $page)
     {
-      $pages[$page->get('module').'/'.$page->get('action').'/'.$page->getRecordId()] = $page;
+      $pages[$page->get('module').'/'.$page->get('action')] = $page;
     }
 
     /*

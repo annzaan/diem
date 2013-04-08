@@ -16,7 +16,6 @@ DmTestDomain:
     Sortable:
     I18n:
       fields:         [ title, is_active ]
-      length:         7
       actAs:
         DmBlameable:
     DmTaggable:
@@ -54,7 +53,6 @@ DmTestCateg:
     Sortable:
     I18n:
       fields:         [ name, is_active ]
-      length:         7
   columns:  
     name:             { type: string(255), notnull: true }
     is_active:        { type: boolean, notnull: true, default: true }
@@ -72,7 +70,6 @@ DmTestPost:
     DmGallery:
     I18n:
       fields:         [ title, excerpt, body, url, is_active ]
-      length:         7
       actAs:
         DmVersionable:
           fields:     ~
@@ -139,7 +136,6 @@ DmTestTag:
     Timestampable:
     I18n:
       fields:         [ name, slug ]
-      length:         7
   columns:
     name:             { type: string(255), notnull: true }
     slug:             { type: string(255), notnull: true, unique: true }

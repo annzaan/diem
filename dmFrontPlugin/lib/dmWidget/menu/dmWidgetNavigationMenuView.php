@@ -8,7 +8,7 @@ class dmWidgetNavigationMenuView extends dmWidgetPluginView
   public function configure()
   {
     parent::configure();
-
+    
     $this->addRequiredVar(array('items', 'ulClass', 'liClass'));
   }
 
@@ -17,13 +17,9 @@ class dmWidgetNavigationMenuView extends dmWidgetPluginView
     $vars = parent::filterViewVars($vars);
 
     $menuClass = dmArray::get($vars, 'menuClass');
-    $menuName = dmArray::get($vars, 'menuName');
 
     $vars['menu'] = $this->getService('menu', $menuClass ? $menuClass : null)
     ->ulClass($vars['ulClass']);
-    if (!is_null($menuName)) {
-	    $vars['menu']->name($menuName);
-    }
 
     foreach($vars['items'] as $index => $item)
     {
@@ -38,25 +34,20 @@ class dmWidgetNavigationMenuView extends dmWidgetPluginView
       {
         $menuItem->getLink()->set('rel', 'nofollow');
       }
-
-      if(!empty($item['target']) && $menuItem->getLink())
-      {
-        $menuItem->getLink()->target($item['target']);
-      }
     }
 
     unset($vars['items'], $vars['ulClass'], $vars['liClass']);
 
     return $vars;
   }
-
+  
   protected function doRender()
   {
     if ($this->isCachable() && $cache = $this->getCache())
     {
       return $cache;
     }
-
+    
     $vars = $this->getViewVars();
 
     $html = $vars['menu']->render();
@@ -65,7 +56,7 @@ class dmWidgetNavigationMenuView extends dmWidgetPluginView
     {
       $this->setCache($html);
     }
-
+    
     return $html;
   }
 

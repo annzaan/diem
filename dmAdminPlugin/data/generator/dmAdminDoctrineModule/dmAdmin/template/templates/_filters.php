@@ -3,7 +3,7 @@
 
 <div class="sf_admin_filter">
 
-  [?php echo _tag('p.title', __('Advanced search', array(), 'dm')) ?]
+  [?php echo _tag('p.title', __('Advanced search')) ?]
   
   [?php if ($form->hasGlobalErrors()): ?]
     [?php echo $form->renderGlobalErrors() ?]

@@ -45,7 +45,7 @@ $form->updateWidget()->save();
 
 $t->ok($widget->exists(), 'Widget has been saved');
 $expected = array(
-  'ulClass' => '',  'menuName' => '',  'liClass' => '',  'items' => array()
+  'ulClass' => '',  'liClass' => '',  'items' => array()
 );
 $t->is_deeply($widget->values, $expected, 'Widget values are correct');
 
@@ -84,7 +84,7 @@ $form->updateWidget()->save();
 
 $t->ok($widget->exists(), 'Widget has been saved');
 $t->is_deeply($widget->values, array(
-  'ulClass' => '',  'menuName' => '',  'liClass' => '', 'items' => array(array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => null, 'target' => null))
+  'ulClass' => '',  'liClass' => '', 'items' => array(array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => null))
 ), 'Widget values are correct');
 
 $t->comment('Recreate the form from the saved widget');
@@ -92,7 +92,7 @@ $t->comment('Recreate the form from the saved widget');
 $form = new $formClass($widget);
 $form->removeCsrfProtection();
 
-$t->is($form->getDefault('items'), array(array('link' => 'page:1', 'text' => 'Home', 'depth' => 0, 'secure' => 0, 'nofollow' => 0, 'depth' => null, 'target' => null)), 'The form default items are correct');
+$t->is($form->getDefault('items'), array(array('link' => 'page:1', 'text' => 'Home', 'depth' => 0, 'secure' => 0, 'nofollow' => 0)), 'The form default items are correct');
 
 $t->comment('Now display the widget');
 
@@ -106,7 +106,7 @@ $expected = array(
   'module' => 'dmWidgetNavigation',
   'position' => $widget->position,
   'value' => json_encode(array(
-    'ulClass' => '',  'menuName' => '',  'liClass' => '', 'items' => array(array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => null, 'target' => null))
+    'ulClass' => '',  'liClass' => '', 'items' => array(array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => null))
   )),
   'updated_at' => $widget->updatedAt
 );
@@ -139,7 +139,7 @@ $t->is($widgetView->render(), $expected, 'render : '.$expected);
 
 $t->is($widgetView->renderForIndex(), '', 'render for index is empty');
 
-$t->comment('Add a page, a non-link, an external link, a mailto, ulClass, menuName and liClass');
+$t->comment('Add a page, a non-link, an external link, a mailto, ulClass and liClass');
 
 $form->bind(array(
   'link' => array('page:1', 'page:'.$page1->id, '', 'http://jquery.com', 'mailto:mail@a.com'),
@@ -147,7 +147,6 @@ $form->bind(array(
   'secure' => array(0, 0, 0, 0, 0),
   'nofollow' => array(0, 0, 0, 0, 1),
   'depth' => array(0, 0, 0, 0, 0),
-  'menuName' => 'my_menu_name',
   'ulClass' => 'my_ul_class',
   'liClass' => 'my_li_class',
   'cssClass' => 'test css_class',
@@ -164,12 +163,12 @@ $form->updateWidget()->save();
 
 $t->ok($widget->exists(), 'Widget has been saved');
 $t->is_deeply($helper->ksort($widget->values), $helper->ksort(array(
-  'ulClass' => 'my_ul_class',  'menuName' => 'my_menu_name',  'liClass' => 'my_li_class', 'items' => array(
-    array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-    array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-    array('link' => '', 'text' => 'nolink', 'depth' => 0, 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-    array('link' => 'http://jquery.com', 'text' => 'jquery', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-    array('link' => 'mailto:mail@a.com', 'text' => 'mail', 'secure' => 0, 'nofollow' => 1, 'depth' => 0, 'target' => null)
+  'ulClass' => 'my_ul_class',  'liClass' => 'my_li_class', 'items' => array(
+    array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+    array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+    array('link' => '', 'text' => 'nolink', 'depth' => 0, 'secure' => 0, 'nofollow' => 0),
+    array('link' => 'http://jquery.com', 'text' => 'jquery', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+    array('link' => 'mailto:mail@a.com', 'text' => 'mail', 'secure' => 0, 'nofollow' => 1, 'depth' => 0)
   ))
 ), 'Widget values are correct');
 
@@ -179,11 +178,11 @@ $form = new $formClass($widget);
 $form->removeCsrfProtection();
 
 $t->is($form->getDefault('items'), array(
-  array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-  array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-  array('link' => '', 'text' => 'nolink', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-  array('link' => 'http://jquery.com', 'text' => 'jquery', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-  array('link' => 'mailto:mail@a.com', 'text' => 'mail', 'secure' => 0, 'nofollow' => 1, 'depth' => 0, 'target' => null)
+  array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+  array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+  array('link' => '', 'text' => 'nolink', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+  array('link' => 'http://jquery.com', 'text' => 'jquery', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+  array('link' => 'mailto:mail@a.com', 'text' => 'mail', 'secure' => 0, 'nofollow' => 1, 'depth' => 0)
 ), 'The form default items are correct');
 
 $t->comment('Now display the widget');
@@ -198,12 +197,12 @@ $expected = array(
   'module' => 'dmWidgetNavigation',
   'position' => $widget->position,
   'value' => json_encode(array(
-    'menuName' => 'my_menu_name', 'ulClass' => 'my_ul_class', 'liClass' => 'my_li_class', 'items' => array(
-      array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-      array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-      array('link' => '', 'text' => 'nolink', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-      array('link' => 'http://jquery.com', 'text' => 'jquery', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-      array('link' => 'mailto:mail@a.com', 'text' => 'mail', 'secure' => 0, 'nofollow' => 1, 'depth' => 0, 'target' => null)
+    'ulClass' => 'my_ul_class',  'liClass' => 'my_li_class', 'items' => array(
+      array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+      array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+      array('link' => '', 'text' => 'nolink', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+      array('link' => 'http://jquery.com', 'text' => 'jquery', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+      array('link' => 'mailto:mail@a.com', 'text' => 'mail', 'secure' => 0, 'nofollow' => 1, 'depth' => 0)
     )
   )),
   'updated_at' => $widget->updatedAt
@@ -250,8 +249,6 @@ $form->bind(array(
   'secure' => 0,
   'nofollow' => 0,
   'depth' => array(0, 1),
-	'target' => null,
-  'menuName' => 'my_menu_name',
   'ulClass' => 'my_ul_class',
   'liClass' => 'my_li_class',
   'cssClass' => 'test css_class',
@@ -268,9 +265,9 @@ $form->updateWidget()->save();
 
 $t->ok($widget->exists(), 'Widget has been saved');
 $t->is_deeply($helper->ksort($widget->values), $helper->ksort(array(
-  'ulClass' => 'my_ul_class',  'menuName' => 'my_menu_name',  'liClass' => 'my_li_class', 'items' => array(
-    array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-    array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 1, 'target' => null)
+  'ulClass' => 'my_ul_class',  'liClass' => 'my_li_class', 'items' => array(
+    array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+    array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 1)
   ))
 ), 'Widget values are correct');
 
@@ -286,9 +283,9 @@ $expected = array(
   'module' => 'dmWidgetNavigation',
   'position' => $widget->position,
   'value' => json_encode(array(
-    'menuName' => 'my_menu_name', 'ulClass' => 'my_ul_class', 'liClass' => 'my_li_class', 'items' => array(
-      array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0, 'target' => null),
-      array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 1, 'target' => null)
+    'ulClass' => 'my_ul_class',  'liClass' => 'my_li_class', 'items' => array(
+      array('link' => 'page:1', 'text' => 'Home', 'secure' => 0, 'nofollow' => 0, 'depth' => 0),
+      array('link' => 'page:'.$page1->id, 'text' => 'Page 1', 'secure' => 0, 'nofollow' => 0, 'depth' => 1)
     )
   )),
   'updated_at' => $widget->updatedAt

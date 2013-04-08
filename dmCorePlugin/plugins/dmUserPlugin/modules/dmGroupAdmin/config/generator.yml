@@ -15,8 +15,6 @@ generator:
           label: Users
         permissions_list:
           label: Permissions
-        records_list: 
-          label: Records
       list:
         display: [=name, description, created_at, updated_at]
         sort:
@@ -25,19 +23,12 @@ generator:
         table_method: getAdminListQuery
         table_count_method: ~
         loremize: false
-  
-      filter:
-        display: 
-          - name
-          - users_list
-          - permissions_list
- 
+
       form:
         display:
-          NONE: [id, name]
+          NONE: [name]
           Users: [users_list]
           Permissions: [permissions_list]
-          Records: [records_list]
           Others: [description]
         class: DmGroupAdminForm
         fields: {  }

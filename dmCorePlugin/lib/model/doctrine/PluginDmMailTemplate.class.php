@@ -31,7 +31,7 @@ abstract class PluginDmMailTemplate extends BaseDmMailTemplate
   public function getNbSentMails()
   {
     return dmDb::query('DmSentMail s')
-    ->where('s.dm_mail_template_id = ?', $this->getId())
+    ->where('s.dm_mail_template_id = ?', $this->id)
     ->count();
   }
 }

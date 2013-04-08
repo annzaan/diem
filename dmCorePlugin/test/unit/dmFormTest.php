@@ -19,10 +19,8 @@ catch(Exception $e)
 {
   $t->pass('Create non existing form');
 }
-//DmUserForm without widgets option will instanciate all widgets
-//here CreatedByDmTestFruits is causing a problem.
-//the actual test does not care about it, so only take care of username
-$forms['dmUser'] = new DmUserForm(null, array('widgets' => array('username', 'password', 'email')));
+
+$forms['dmUser'] = new DmUserForm;
 
 $form = $forms['dmUser'];
 $widgetSchema = $form->getWidgetSchema();

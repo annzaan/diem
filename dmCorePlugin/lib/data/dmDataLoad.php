@@ -89,8 +89,8 @@ class dmDataLoad
         /*
          * Try to find an existing config from another culture
          */
-        $existing = dmDb::query('DmMailTemplate t')
-        ->where('t.id = ?', $mailTemplate->id)
+        $existing = $table
+        ->where('s.id = ?', $mailTemplate->id)
         ->limit(1)
         ->fetchArray();
 
@@ -470,7 +470,6 @@ class dmDataLoad
       "page_bar_admin" => "See page bar in admin",
       "media_bar_admin" => "See media bar in admin",
       "media_library" => "Use media library in admin",
-      "media_ignore_whitelist" => "Upload media with any filetype",
       "tool_bar_admin" => "See toolbar in admin",
       "page_bar_front" => "See page bar in front",
       "media_bar_front" => "See media bar in front",
@@ -493,8 +492,6 @@ class dmDataLoad
       'see_chart' => 'See the charts',
       'see_diagrams' => 'See the developer diagrams',
       'see_server' => 'See the server infos',
-      'see_request' => 'See the requests window',
-    	'see_event' => 'See the events window',
       "config_panel" => "Use the configuration panel",
       "translation" => "Use the translation interface",
       "layout" => "Use the layout interface",

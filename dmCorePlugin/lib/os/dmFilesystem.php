@@ -145,19 +145,48 @@ class dmFilesystem extends sfFilesystem
       throw new dmException(sprintf('Try to delete %s, which is outside symfony project', $dir));
     }
 
-    $files = sfFinder::type('file')->maxdepth(0)->in($dir);
-    foreach($files as $file)
+    $success = true;
+
+    if(!$dh = @opendir($dir))
     {
-    	$success = @unlink($file);
+      if ($throwExceptions)
+      {
+        throw new dmException("Can not open $dir folder");
+      }
+      else
+      {
+        $success = false;
+      }
     }
-    
-    $dirs = sfFinder::type('dir')->maxdepth(0)->in($dir);
-    foreach($dirs as $dir)
+    while (false !== ($obj = @readdir($dh)))
     {
-    	$this->deleteDir($dir, $throwExceptions);
+      if($obj == '.' || $obj == '..')
+      {
+        continue;
+      }
+
+      if (is_dir($dir . '/' . $obj))
+      {
+        $success &= $this->deleteDir($dir.'/'.$obj, $throwExceptions);
+      }
+      else
+      {
+        if (!@unlink($dir . '/' . $obj))
+        {
+          if ($throwExceptions)
+          {
+            throw new dmException("Can not delete file $dir/$obj");
+          }
+          else
+          {
+            $success = false;
+          }
+        }
+      }
     }
-    
-    return true;
+    @closedir($dh);
+
+    return $success;
   }
 
   // destroy folder
@@ -215,18 +244,8 @@ class dmFilesystem extends sfFilesystem
     /*
      * $from must end with /
      */
-    if (strtolower(substr(PHP_OS, 0, 3)) == 'win')
-    {
-      $from = str_replace('/', '\\', trim($from, '/\\')).'\\';
-      $to = str_replace('/', '\\', $to);
-      
-      return str_replace('\\', '/', $this->calculateRelativeDir($from, $to));
-    }
-    else
-    {
-      $from = '/'.trim($from, '/').'/';
-      return $this->calculateRelativeDir($from, $to);
-    }
+    $from = '/'.trim($from, '/').'/';
+    return $this->calculateRelativeDir($from, $to);
   }
 
   /**

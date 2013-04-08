@@ -59,12 +59,12 @@ class dmValidatorDate extends sfValidatorDate
       $context = $this->getOption('context');
       $i18n = $context->getI18N();
       list($d, $m, $y) = $i18n->getDateForCulture($value, $context->getUser()->getCulture());
-      $clean = "$y-$m-$d";
+      $value = "$y-$m-$d";
       if ($this->getOption('with_time')) {
         list($h, $m) = $i18n->getTimeForCulture($value, $context->getUser()->getCulture());
-        $clean = "$clean $h:$m";
+        $value = "$value $h:$m";
       }
-      $clean = strtotime($clean);
+      $clean = strtotime($value);
       if (false === $clean) {
         throw new sfValidatorError($this, 'invalid', array('value' => $value));
       }

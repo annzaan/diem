@@ -67,8 +67,6 @@ class dmSearchIndexGroup extends dmSearchIndexCommon
 
     $this->serviceContainer->getService('logger')->log($this->getName().' : Optimizing group...');
     
-    $this->fixPermissions();
-    
     foreach($this->getIndices() as $index)
     {
       $index->optimize();

@@ -116,9 +116,6 @@ class dmFrontComponentGenerator extends dmFrontModuleGenerator
       'indentation' => $this->indentation,
       'name'        => $methodName,
       'visibility'  => 'public',
-      'parameters'  => array(
-        array('name' => 'request', 'type' => 'dmWebRequest')
-      ),
       'body'        => $body
     ));
   }

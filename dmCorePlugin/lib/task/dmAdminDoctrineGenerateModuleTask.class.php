@@ -159,7 +159,5 @@ EOF
       $generatorFile,
       $generatorBuilder->getTransformed(file_get_contents($generatorFile))
     );
-    
-    $moduleObject->getSecurityManager()->secure($moduleObject);
   }
 }

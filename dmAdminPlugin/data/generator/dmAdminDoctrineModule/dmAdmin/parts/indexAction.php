@@ -21,5 +21,4 @@
 
     $this->pager = $this->getPager();
     $this->sort = $this->getSort();
-    
   }

@@ -4,8 +4,6 @@ require_once(realpath(dirname(__FILE__).'/../../..').'/unit/helper/dmUnitTestHel
 $helper = new dmUnitTestHelper();
 $helper->boot();
 
-$seoSyncService = $helper->get('seo_synchronizer');
-
 $nbLoremizeRecords = 10;
 $helper->get('page_tree_watcher')->connect();
 $markdown = $helper->get('markdown');
@@ -63,24 +61,22 @@ foreach(dmDb::table('dmTestPost')->findAll() as $post)
   $t->is($post->isActive, $page->isActive, 'is_active field synchronized to '.($post->isActive ? 'TRUE' : 'FALSE'));
 
   $slug = 'dm-test-domains/'.$domain->id.'-'.dmString::slugify($domain->title).'/'.$categ->id.'-'.dmString::slugify($categ->name).'/'.dmString::slugify($post->title).'-'.$post->id;
-  $slug = $seoSyncService->truncateValueForField($slug, 'slug');
+  $slug = dmSeoSynchronizer::truncateValueForField($slug, 'slug');
     $t->is($page->slug, $slug, 'slug : '.$slug);
 
   $name = 'Post : '.trim($post->title);
-  $name = $seoSyncService->truncateValueForField($name, 'name');
+  $name = dmSeoSynchronizer::truncateValueForField($name, 'name');
     $t->is($page->name, $name, 'name : '.$name);
 
   $title = ucfirst(trim($post->title).' | '.trim($categ->name));
-  $title = $seoSyncService->truncateValueForField($title, 'title');
+  $title = dmSeoSynchronizer::truncateValueForField($title, 'title');
     $t->is($page->title, $title, 'title : '.$title);
 
   $h1 = trim($post->title);
-  $h1 = $seoSyncService->truncateValueForField($h1, 'h1');
+  $h1 = dmSeoSynchronizer::truncateValueForField($h1, 'h1');
     $t->is($page->h1, $h1, 'h1 : '.$h1);
 
-    //looks like SEO have to $markdown->toText() the $post->body when auto-setting page description. 
-    //as of now, SEO Syncer does not. Removing the $markdown->toText() part
-  $description = $seoSyncService->truncateValueForField($post->body, 'description');
+  $description = dmSeoSynchronizer::truncateValueForField(dmMarkdown::brutalToText($post->body), 'description');
     $t->is($page->description, $description ? $description : null, 'description : '.$description);
 }
 

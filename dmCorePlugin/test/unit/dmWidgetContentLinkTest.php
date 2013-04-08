@@ -198,10 +198,14 @@ $t->isa_ok($widgetView, $widgetType->getOption('view_class'), 'The widget view i
 $t->ok(!$widgetView->isRequiredVar('mediaId'), 'mediaId is not a view required var');
 $t->ok($widgetView->isRequiredVar('href'), 'href is a view required var');
 
+<<<<<<< HEAD
 $expected = $helper->get('helper')->link($internalUrl)->addClass('test css_class')->text('test text')->title('test title')->render();
 
 #disabled according to https://github.com/diem-project/diem/commit/1ad59a922b929ae8752c99118ebf255c84c8c6c3
 #$t->is($widgetView->render(array('css_class' => 'test css_class')), $expected, 'render : '.$expected);
+=======
+$t->is($widgetView->render(), $html = $helper->get('helper')->link($internalUrl)->set('.test.css_class')->text('test text')->title('test title')->render(), 'render : '.$html);
+>>>>>>> c3a3392eeaaf609356f1a404ff87d4a5bf5a7ff3
 
 $t->is($widgetView->renderForIndex(), $expected = 'test text test title', 'render for index is '.$expected);
 
